@@ -1,8 +1,7 @@
-﻿using System;
+﻿#nullable disable
+
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-
-#nullable disable
 
 namespace Kartowka.Migrations
 {
@@ -12,6 +11,25 @@ namespace Kartowka.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "users",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    email_address = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    status = table.Column<int>(type: "integer", nullable: false),
+                    created_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    last_online_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    password_hash = table.Column<byte[]>(type: "bytea", nullable: false),
+                    password_salt = table.Column<byte[]>(type: "bytea", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_users", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "packs",
                 columns: table => new
@@ -27,6 +45,12 @@ namespace Kartowka.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_packs", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_packs_users_user_id",
+                        column: x => x.author_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,10 +119,30 @@ namespace Kartowka.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "ix_packs_author_id",
+                table: "packs",
+                column: "author_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_packs_name",
                 table: "packs",
                 column: "name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_questions_question_category_id",
+                table: "questions",
+                column: "question_category_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_questions_categories_round_id",
+                table: "questions_categories",
+                column: "round_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_rounds_id",
+                table: "rounds",
+                column: "id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_rounds_pack_id_order",
@@ -121,6 +165,9 @@ namespace Kartowka.Migrations
 
             migrationBuilder.DropTable(
                 name: "packs");
+
+            migrationBuilder.DropTable(
+                name: "users");
         }
     }
 }

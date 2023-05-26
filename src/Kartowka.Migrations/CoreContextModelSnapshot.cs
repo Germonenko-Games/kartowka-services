@@ -56,6 +56,9 @@ namespace Kartowka.Migrations
                     b.HasKey("Id")
                         .HasName("pk_packs");
 
+                    b.HasIndex("AuthorId")
+                        .HasDatabaseName("ix_packs_author_id");
+
                     b.HasIndex("Name")
                         .IsUnique()
                         .HasDatabaseName("ix_packs_name");
@@ -97,6 +100,9 @@ namespace Kartowka.Migrations
                     b.HasKey("Id")
                         .HasName("pk_questions");
 
+                    b.HasIndex("QuestionCategoryId")
+                        .HasDatabaseName("ix_questions_question_category_id");
+
                     b.ToTable("questions", (string)null);
                 });
 
@@ -125,6 +131,9 @@ namespace Kartowka.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_questions_categories");
+
+                    b.HasIndex("RoundId")
+                        .HasDatabaseName("ix_questions_categories_round_id");
 
                     b.ToTable("questions_categories", (string)null);
                 });
@@ -155,11 +164,73 @@ namespace Kartowka.Migrations
                     b.HasKey("Id")
                         .HasName("pk_rounds");
 
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_rounds_id");
+
                     b.HasIndex("PackId", "Order")
                         .IsUnique()
                         .HasDatabaseName("ix_rounds_pack_id_order");
 
                     b.ToTable("rounds", (string)null);
+                });
+
+            modelBuilder.Entity("Kartowka.Core.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_date");
+
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("email_address");
+
+                    b.Property<DateTimeOffset>("LastOnlineDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_online_date");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("bytea")
+                        .HasColumnName("password_hash");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("bytea")
+                        .HasColumnName("password_salt");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id")
+                        .HasName("pk_users");
+
+                    b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("Kartowka.Core.Models.Pack", b =>
+                {
+                    b.HasOne("Kartowka.Core.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_packs_users_user_id");
                 });
 
             modelBuilder.Entity("Kartowka.Core.Models.Question", b =>

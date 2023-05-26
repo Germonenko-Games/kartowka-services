@@ -15,17 +15,20 @@
     </ItemGroup>
     
     <ItemGroup>
-      <Compile Update="Resources\ErrorMessages.ru.Designer.cs">
+      <Compile Update="Resources\CoreErrorMessages.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <DependentUpon>ErrorMessages.ru.resx</DependentUpon>
+        <DependentUpon>CoreErrorMessages.resx</DependentUpon>
       </Compile>
     </ItemGroup>
     
     <ItemGroup>
-      <EmbeddedResource Update="Resources\ErrorMessages.ru.resx">
+      <EmbeddedResource Update="Resources\CoreErrorMessages.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>CoreErrorMessages.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\CoreErrorMessages.ru.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>ErrorMessages.ru.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
