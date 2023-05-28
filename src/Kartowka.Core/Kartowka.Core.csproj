@@ -24,7 +24,7 @@
     
     <ItemGroup>
       <EmbeddedResource Update="Resources\CoreErrorMessages.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
+        <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>CoreErrorMessages.Designer.cs</LastGenOutput>
       </EmbeddedResource>
       <EmbeddedResource Update="Resources\CoreErrorMessages.ru.resx">

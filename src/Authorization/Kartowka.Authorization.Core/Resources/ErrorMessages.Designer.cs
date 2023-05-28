@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Kartowka.Core.Resources {
+namespace Kartowka.Authorization.Core.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Kartowka.Core.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class CoreErrorMessages {
+    public class ErrorMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal CoreErrorMessages() {
+        internal ErrorMessages() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Kartowka.Core.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kartowka.Core.Resources.CoreErrorMessages", typeof(CoreErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kartowka.Authorization.Core.Resources.ErrorMessages", typeof(ErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,11 @@ namespace Kartowka.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The value must be a positive number..
+        ///   Looks up a localized string similar to Login or password is invalid..
         /// </summary>
-        public static string PositiveNumber {
+        public static string InvalidUserCredentials {
             get {
-                return ResourceManager.GetString("PositiveNumber", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Field is required..
-        /// </summary>
-        public static string Required {
-            get {
-                return ResourceManager.GetString("Required", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Max length is 250..
-        /// </summary>
-        public static string StringLength250 {
-            get {
-                return ResourceManager.GetString("StringLength250", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Max length is 400..
-        /// </summary>
-        public static string StringLength400 {
-            get {
-                return ResourceManager.GetString("StringLength400", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Max length is 50..
-        /// </summary>
-        public static string StringLength50 {
-            get {
-                return ResourceManager.GetString("StringLength50", resourceCulture);
+                return ResourceManager.GetString("InvalidUserCredentials", resourceCulture);
             }
         }
     }
