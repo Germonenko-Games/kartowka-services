@@ -5,6 +5,7 @@ using Kartowka.Authorization.Core.Contracts;
 using Kartowka.Authorization.Core.Services;
 using Kartowka.Authorization.Core.Services.Abstractions;
 using Kartowka.Authorization.Infrastructure.Contracts;
+using Kartowka.Authorization.Infrastructure.Options;
 using Kartowka.Common.Crypto;
 using Kartowka.Common.Crypto.Abstractions;
 using Kartowka.Core;
@@ -12,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Security:Jwt"));
 
 builder.Services.AddControllers();
 builder.Services.AddFeatureManagement();
