@@ -118,15 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PositiveNumber" xml:space="preserve">
-    <value>Значение должно быть больше либо равным нулю.</value>
+    <value>The value must be a positive number.</value>
   </data>
   <data name="Required" xml:space="preserve">
-    <value>Обязательное поле.</value>
+    <value>Field is required.</value>
+  </data>
+  <data name="StringLength250" xml:space="preserve">
+    <value>Max length is 250.</value>
   </data>
   <data name="StringLength400" xml:space="preserve">
-    <value>Максимальная длина не должна превышать 400 символов.</value>
+    <value>Max length is 400.</value>
   </data>
   <data name="StringLength50" xml:space="preserve">
-    <value>Максимальная длина не должна превышать 50 символов.</value>
+    <value>Max length is 50.</value>
   </data>
 </root>

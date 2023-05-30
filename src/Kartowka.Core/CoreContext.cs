@@ -18,11 +18,14 @@ public class CoreContext : DbContext
 
     public DbSet<Round> Rounds => Set<Round>();
 
+    public DbSet<User> Users => Set<User>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new PackEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new QuestionEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new QuestionsCategoryEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new RoundEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
     }
 }

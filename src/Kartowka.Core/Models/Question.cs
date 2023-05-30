@@ -9,17 +9,17 @@ public class Question
 
     [Required(
         AllowEmptyStrings = false,
-        ErrorMessageResourceType = typeof(ErrorMessages),
+        ErrorMessageResourceType = typeof(CoreErrorMessages),
         ErrorMessageResourceName = "Required"
     )]
     [StringLength(400,
-        ErrorMessageResourceType = typeof(ErrorMessages),
+        ErrorMessageResourceType = typeof(CoreErrorMessages),
         ErrorMessageResourceName = "StringLength400"
     )]
     public string Content { get; set; } = string.Empty;
 
     [Range(0, int.MaxValue,
-        ErrorMessageResourceType = typeof(ErrorMessages),
+        ErrorMessageResourceType = typeof(CoreErrorMessages),
         ErrorMessageResourceName = "PositiveNumber"
     )]
     public int Score { get; set; }

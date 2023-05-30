@@ -7,18 +7,18 @@ public class QuestionsCategory
     public long Id { get; set; }
 
     [Range(0, int.MaxValue,
-        ErrorMessageResourceType = typeof(ErrorMessages),
+        ErrorMessageResourceType = typeof(CoreErrorMessages),
         ErrorMessageResourceName = "PositiveNumber"
     )]
     public int Order { get; set; }
 
     [Required(
         AllowEmptyStrings = false,
-        ErrorMessageResourceType = typeof(ErrorMessages),
+        ErrorMessageResourceType = typeof(CoreErrorMessages),
         ErrorMessageResourceName = "Required"
     )]
     [StringLength(50,
-        ErrorMessageResourceType = typeof(ErrorMessages),
+        ErrorMessageResourceType = typeof(CoreErrorMessages),
         ErrorMessageResourceName = "StringLength50"
     )]
     public string Name { get; set; } = string.Empty;
