@@ -1,4 +1,6 @@
 ﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Kartowka.Api.Models;
 using Kartowka.Api.Resources;
 using Kartowka.Core.Exceptions;
@@ -9,6 +11,12 @@ namespace Kartowka.Api.Middleware;
 
 public class KartowkaExceptionsHandlingMiddleware : IMiddleware
 {
+    private readonly JsonSerializerOptions _serializerOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    };
+
     private readonly ILogger<KartowkaExceptionsHandlingMiddleware> _logger;
 
     private readonly IStringLocalizer<ErrorMessages> _stringLocalizer;
@@ -28,6 +36,18 @@ public class KartowkaExceptionsHandlingMiddleware : IMiddleware
         {
             await next(context);
         }
+        catch (KartowkaValidationException e)
+        {
+            var body = await context.Request.BodyReader.ReadAsync();
+            _logger.LogInformation(
+                "Bad Request (400) returned from {Url} trying to handle a request with the following body: {Body}",
+                context.Request.GetDisplayUrl(),
+                Encoding.UTF8.GetString(body.Buffer)
+            );
+
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsJsonAsync(new ErrorResponse(e.Message, e.Errors), _serializerOptions);
+        }
         catch (KartowkaNotFoundException e)
         {
             var body = await context.Request.BodyReader.ReadAsync();
@@ -38,7 +58,7 @@ public class KartowkaExceptionsHandlingMiddleware : IMiddleware
             );
 
             context.Response.StatusCode = StatusCodes.Status404NotFound;
-            await context.Response.WriteAsJsonAsync(new ErrorResponse(e.Message));
+            await context.Response.WriteAsJsonAsync(new ErrorResponse(e.Message), _serializerOptions);
         }
         catch (Exception e)
         {
@@ -52,7 +72,7 @@ public class KartowkaExceptionsHandlingMiddleware : IMiddleware
 
             var response = new ErrorResponse(_stringLocalizer["UnknownErrorResponse"]);
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            await context.Response.WriteAsJsonAsync(response);
+            await context.Response.WriteAsJsonAsync(response, _serializerOptions);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Kartowka.Core;
+using Kartowka.Core.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 
@@ -25,6 +26,12 @@ public class ApplyMigrationsHostedService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        var runMigrations = await _featureManager.IsEnabledAsync(FeatureFlags.RunMigrationsOnStartup);
+        if (!runMigrations)
+        {
+            return;
+        }
+
         var scope = _serviceProvider.CreateScope();
 
         try

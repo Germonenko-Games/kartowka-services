@@ -1,4 +1,3 @@
-using System.Globalization;
 using Kartowka.Api.HostedServices;
 using Kartowka.Api.Middleware;
 using Kartowka.Authorization.Core.Contracts;
@@ -8,7 +7,12 @@ using Kartowka.Authorization.Infrastructure.Contracts;
 using Kartowka.Authorization.Infrastructure.Options;
 using Kartowka.Common.Crypto;
 using Kartowka.Common.Crypto.Abstractions;
+using Kartowka.Common.Validation;
 using Kartowka.Core;
+using Kartowka.Registration.Core.Models;
+using Kartowka.Registration.Core.Services;
+using Kartowka.Registration.Core.Services.Abstractions;
+using Kartowka.Registration.Core.Services.Validators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 
@@ -41,11 +45,16 @@ builder.Services.AddDbContext<CoreContext>(options =>
         .UseSnakeCaseNamingConvention();
 });
 
+// Hosted Services
 builder.Services.AddHostedService<ApplyMigrationsHostedService>();
 
+// Services
 builder.Services.AddScoped<IHasher, Pbkdf2Hasher>();
 builder.Services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();
 builder.Services.AddScoped<IAccessTokenGenerator, JwtAccessTokenGenerator>();
+builder.Services.AddScoped(typeof(IAsyncValidatorsRunner<>), typeof(AsyncValidatorsRunner<>));
+builder.Services.AddScoped<IAsyncValidator<UserData>, UserDataUniquenessValidator>();
+builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 
 // Middleware DI registration
 builder.Services.AddScoped<RequestBufferingMiddleware>();
