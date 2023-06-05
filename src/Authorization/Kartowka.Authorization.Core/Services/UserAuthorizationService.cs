@@ -47,7 +47,7 @@ public class UserAuthorizationService : IUserAuthorizationService
         }
 
         var passwordHashToCompare = _hasher.Hash(credentials.Password, user.PasswordSalt);
-        if (passwordHashToCompare.SequenceEqual(user.PasswordHash))
+        if (!passwordHashToCompare.SequenceEqual(user.PasswordHash))
         {
             throw new KartowkaNotFoundException(_stringLocalizer["InvalidUserCredentials"]);
         }
