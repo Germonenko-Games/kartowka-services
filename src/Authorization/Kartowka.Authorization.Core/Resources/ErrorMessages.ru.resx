@@ -120,4 +120,7 @@
   <data name="InvalidUserCredentials" xml:space="preserve">
     <value>Логин или пароль не верен.</value>
   </data>
+  <data name="UserIsInactive" xml:space="preserve">
+    <value>Профиль пользователя не активен.</value>
+  </data>
 </root>

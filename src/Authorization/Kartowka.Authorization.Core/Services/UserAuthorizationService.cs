@@ -5,6 +5,7 @@ using Kartowka.Authorization.Core.Services.Abstractions;
 using Kartowka.Common.Crypto.Abstractions;
 using Kartowka.Core;
 using Kartowka.Core.Exceptions;
+using Kartowka.Core.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -38,18 +39,24 @@ public class UserAuthorizationService : IUserAuthorizationService
         var user = await _context.Users.FirstOrDefaultAsync(u => u.EmailAddress == credentials.EmailAddress);
         if (user == null)
         {
-            throw new KartowkaNotFoundException(_stringLocalizer["InvalidUserCredentials"]);
+            throw new KartowkaNotFoundException(_stringLocalizer[nameof(ErrorMessages.InvalidUserCredentials)]);
         }
 
         if (credentials.Password is null || user.PasswordHash is null || user.PasswordSalt is null)
         {
-            throw new KartowkaNotFoundException(_stringLocalizer["InvalidUserCredentials"]);
+            throw new KartowkaNotFoundException(_stringLocalizer[nameof(ErrorMessages.InvalidUserCredentials)]);
         }
 
         var passwordHashToCompare = _hasher.Hash(credentials.Password, user.PasswordSalt);
         if (!passwordHashToCompare.SequenceEqual(user.PasswordHash))
         {
-            throw new KartowkaNotFoundException(_stringLocalizer["InvalidUserCredentials"]);
+            throw new KartowkaNotFoundException(_stringLocalizer[nameof(ErrorMessages.InvalidUserCredentials)]);
+        }
+
+        // This check must be run at the end.
+        if (user.Status != UserStatus.Active)
+        {
+            throw new KartowkaException(_stringLocalizer[nameof(ErrorMessages.UserIsInactive)]);
         }
 
         return _accessTokenGenerator.GenerateToken(user);
