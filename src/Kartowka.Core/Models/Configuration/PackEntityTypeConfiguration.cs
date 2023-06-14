@@ -3,19 +3,28 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Kartowka.Core.Models.Configuration;
 
-internal class PackEntityTypeConfiguration : IEntityTypeConfiguration<Pack>
+public class PackEntityTypeConfiguration : IEntityTypeConfiguration<Pack>
 {
+    private const string PackIdPropertyName = "PackId";
+
     public void Configure(EntityTypeBuilder<Pack> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(pack => pack.Id);
 
-        builder
-            .HasIndex(x => x.Name)
-            .IsUnique();
-
-        builder
-            .HasMany(pack => pack.Rounds)
+        builder.HasMany(pack => pack.Rounds)
             .WithOne()
-            .HasForeignKey("PackId");
+            .HasForeignKey(PackIdPropertyName);
+
+        builder.HasMany(pack => pack.QuestionsCategories)
+            .WithOne()
+            .HasForeignKey(PackIdPropertyName);
+
+        builder.HasMany(pack => pack.Questions)
+            .WithOne()
+            .HasForeignKey(PackIdPropertyName);
+
+        builder.HasOne<User>()
+            .WithMany()
+            .HasForeignKey("AuthorId");
     }
 }

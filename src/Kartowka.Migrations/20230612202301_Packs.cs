@@ -80,19 +80,25 @@ namespace Kartowka.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    round_id = table.Column<long>(type: "bigint", nullable: true),
                     order = table.Column<int>(type: "integer", nullable: false),
                     name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    round_id = table.Column<long>(type: "bigint", nullable: false)
+                    pack_id = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_questions_categories", x => x.id);
                     table.ForeignKey(
+                        name: "fk_questions_categories_packs_pack_id",
+                        column: x => x.pack_id,
+                        principalTable: "packs",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "fk_questions_categories_rounds_round_id",
                         column: x => x.round_id,
                         principalTable: "rounds",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateTable(
@@ -101,21 +107,27 @@ namespace Kartowka.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    questions_category_id = table.Column<long>(type: "bigint", nullable: true),
                     content = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false),
                     score = table.Column<int>(type: "integer", nullable: false),
                     content_type = table.Column<int>(type: "integer", nullable: false),
                     question_type = table.Column<int>(type: "integer", nullable: false),
-                    question_category_id = table.Column<long>(type: "bigint", nullable: false)
+                    pack_id = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_questions", x => x.id);
                     table.ForeignKey(
-                        name: "fk_questions_questions_categories_questions_category_id",
-                        column: x => x.question_category_id,
-                        principalTable: "questions_categories",
+                        name: "fk_questions_packs_pack_id",
+                        column: x => x.pack_id,
+                        principalTable: "packs",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_questions_questions_categories_questions_category_id",
+                        column: x => x.questions_category_id,
+                        principalTable: "questions_categories",
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -124,15 +136,19 @@ namespace Kartowka.Migrations
                 column: "author_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_packs_name",
-                table: "packs",
-                column: "name",
-                unique: true);
+                name: "ix_questions_pack_id",
+                table: "questions",
+                column: "pack_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_questions_question_category_id",
+                name: "ix_questions_questions_category_id",
                 table: "questions",
-                column: "question_category_id");
+                column: "questions_category_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_questions_categories_pack_id",
+                table: "questions_categories",
+                column: "pack_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_questions_categories_round_id",
@@ -140,14 +156,20 @@ namespace Kartowka.Migrations
                 column: "round_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_rounds_id",
+                name: "ix_rounds_pack_id",
                 table: "rounds",
-                column: "id");
+                column: "pack_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_rounds_pack_id_order",
-                table: "rounds",
-                columns: new[] { "pack_id", "order" },
+                name: "ix_users_email_address",
+                table: "users",
+                column: "email_address",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_users_username",
+                table: "users",
+                column: "username",
                 unique: true);
         }
 

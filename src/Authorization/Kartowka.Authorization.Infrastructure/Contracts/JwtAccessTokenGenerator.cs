@@ -30,6 +30,8 @@ public class JwtAccessTokenGenerator : IAccessTokenGenerator
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
+            Audience = _options.Audience,
+            Issuer = _options.Issuer,
             IssuedAt = issueDate,
             Expires = expireDate,
             Subject = new (new []{userIdClaim}),
@@ -38,16 +40,6 @@ public class JwtAccessTokenGenerator : IAccessTokenGenerator
                 SecurityAlgorithms.HmacSha256Signature
             )
         };
-
-        if (tokenParameters.ValidateIssuer)
-        {
-            tokenDescriptor.Issuer = tokenParameters.ValidIssuer;
-        }
-
-        if (tokenParameters.ValidateAudience)
-        {
-            tokenDescriptor.Issuer = tokenParameters.ValidAudience;
-        }
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var tokenStringRepresentation = tokenHandler.CreateToken(tokenDescriptor);
@@ -58,15 +50,19 @@ public class JwtAccessTokenGenerator : IAccessTokenGenerator
             AccessToken = tokenHandler.WriteToken(tokenStringRepresentation),
         };
     }
-    
+
     private TokenValidationParameters GetTokenValidationParameters()
     {
         var jwtSecretBytes = Encoding.UTF8.GetBytes(_options.Secret);
         var tokenParameters = new TokenValidationParameters
         {
+            ValidateAudience = true,
             ValidateLifetime = true,
+            ValidateIssuer = true,
             RequireExpirationTime = true,
             ClockSkew = TimeSpan.Zero,
+            ValidAudience = _options.Audience,
+            ValidIssuer = _options.Issuer,
             IssuerSigningKey = new SymmetricSecurityKey(jwtSecretBytes)
         };
 

@@ -1,18 +1,11 @@
-﻿using Kartowka.Core.Resources;
+﻿using System.ComponentModel.DataAnnotations;
+using Kartowka.Core.Resources;
 
-namespace Kartowka.Core.Models;
+namespace Kartowka.Packs.Core.Models;
 
-public class QuestionsCategory
+public class CreatePackDto
 {
-    public long Id { get; set; }
-
-    public long? RoundId { get; set; }
-
-    [Range(0, int.MaxValue,
-        ErrorMessageResourceType = typeof(CoreErrorMessages),
-        ErrorMessageResourceName = "PositiveNumber"
-    )]
-    public int Order { get; set; }
+    public int AuthorId { get; set; }
 
     [Required(
         AllowEmptyStrings = false,

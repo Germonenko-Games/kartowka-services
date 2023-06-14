@@ -16,5 +16,5 @@ Here is user secrets template:
 
 To add a new migrations add the following comand from withing the root of the repository.
 ```shell
-dotnet ef migrations add Packs --project src/Kartowka.Migrations --startup-project src/Kartowka.Api -o ./
+dotnet ef migrations add {MIGRATION_NAME} --project src/Kartowka.Migrations --startup-project src/Kartowka.Api -o ./
 ```

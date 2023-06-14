@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Kartowka.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    [Migration("20230528134056_Packs")]
+    [Migration("20230612202301_Packs")]
     partial class Packs
     {
         /// <inheritdoc />
@@ -60,10 +60,6 @@ namespace Kartowka.Migrations
                     b.HasIndex("AuthorId")
                         .HasDatabaseName("ix_packs_author_id");
 
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("ix_packs_name");
-
                     b.ToTable("packs", (string)null);
                 });
 
@@ -86,13 +82,17 @@ namespace Kartowka.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("content_type");
 
-                    b.Property<long>("QuestionCategoryId")
+                    b.Property<long>("PackId")
                         .HasColumnType("bigint")
-                        .HasColumnName("question_category_id");
+                        .HasColumnName("pack_id");
 
                     b.Property<int>("QuestionType")
                         .HasColumnType("integer")
                         .HasColumnName("question_type");
+
+                    b.Property<long?>("QuestionsCategoryId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("questions_category_id");
 
                     b.Property<int>("Score")
                         .HasColumnType("integer")
@@ -101,8 +101,11 @@ namespace Kartowka.Migrations
                     b.HasKey("Id")
                         .HasName("pk_questions");
 
-                    b.HasIndex("QuestionCategoryId")
-                        .HasDatabaseName("ix_questions_question_category_id");
+                    b.HasIndex("PackId")
+                        .HasDatabaseName("ix_questions_pack_id");
+
+                    b.HasIndex("QuestionsCategoryId")
+                        .HasDatabaseName("ix_questions_questions_category_id");
 
                     b.ToTable("questions", (string)null);
                 });
@@ -126,12 +129,19 @@ namespace Kartowka.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("order");
 
-                    b.Property<long>("RoundId")
+                    b.Property<long>("PackId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("pack_id");
+
+                    b.Property<long?>("RoundId")
                         .HasColumnType("bigint")
                         .HasColumnName("round_id");
 
                     b.HasKey("Id")
                         .HasName("pk_questions_categories");
+
+                    b.HasIndex("PackId")
+                        .HasDatabaseName("ix_questions_categories_pack_id");
 
                     b.HasIndex("RoundId")
                         .HasDatabaseName("ix_questions_categories_round_id");
@@ -165,12 +175,8 @@ namespace Kartowka.Migrations
                     b.HasKey("Id")
                         .HasName("pk_rounds");
 
-                    b.HasIndex("Id")
-                        .HasDatabaseName("ix_rounds_id");
-
-                    b.HasIndex("PackId", "Order")
-                        .IsUnique()
-                        .HasDatabaseName("ix_rounds_pack_id_order");
+                    b.HasIndex("PackId")
+                        .HasDatabaseName("ix_rounds_pack_id");
 
                     b.ToTable("rounds", (string)null);
                 });
@@ -221,6 +227,14 @@ namespace Kartowka.Migrations
                     b.HasKey("Id")
                         .HasName("pk_users");
 
+                    b.HasIndex("EmailAddress")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_email_address");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_username");
+
                     b.ToTable("users", (string)null);
                 });
 
@@ -236,21 +250,31 @@ namespace Kartowka.Migrations
 
             modelBuilder.Entity("Kartowka.Core.Models.Question", b =>
                 {
-                    b.HasOne("Kartowka.Core.Models.QuestionsCategory", null)
+                    b.HasOne("Kartowka.Core.Models.Pack", null)
                         .WithMany("Questions")
-                        .HasForeignKey("QuestionCategoryId")
+                        .HasForeignKey("PackId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
+                        .HasConstraintName("fk_questions_packs_pack_id");
+
+                    b.HasOne("Kartowka.Core.Models.QuestionsCategory", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionsCategoryId")
                         .HasConstraintName("fk_questions_questions_categories_questions_category_id");
                 });
 
             modelBuilder.Entity("Kartowka.Core.Models.QuestionsCategory", b =>
                 {
-                    b.HasOne("Kartowka.Core.Models.Round", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("RoundId")
+                    b.HasOne("Kartowka.Core.Models.Pack", null)
+                        .WithMany("QuestionsCategories")
+                        .HasForeignKey("PackId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
+                        .HasConstraintName("fk_questions_categories_packs_pack_id");
+
+                    b.HasOne("Kartowka.Core.Models.Round", null)
+                        .WithMany()
+                        .HasForeignKey("RoundId")
                         .HasConstraintName("fk_questions_categories_rounds_round_id");
                 });
 
@@ -266,17 +290,11 @@ namespace Kartowka.Migrations
 
             modelBuilder.Entity("Kartowka.Core.Models.Pack", b =>
                 {
-                    b.Navigation("Rounds");
-                });
-
-            modelBuilder.Entity("Kartowka.Core.Models.QuestionsCategory", b =>
-                {
                     b.Navigation("Questions");
-                });
 
-            modelBuilder.Entity("Kartowka.Core.Models.Round", b =>
-                {
-                    b.Navigation("Categories");
+                    b.Navigation("QuestionsCategories");
+
+                    b.Navigation("Rounds");
                 });
 #pragma warning restore 612, 618
         }

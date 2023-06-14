@@ -11,7 +11,9 @@
 
   <ItemGroup>
     <PackageReference Include="EFCore.NamingConventions" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
+    <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="6.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,6 +31,7 @@
     <ProjectReference Include="..\Common\Kartowka.Common.Crypto\Kartowka.Common.Crypto.csproj" />
     <ProjectReference Include="..\Kartowka.Core\Kartowka.Core.csproj" />
     <ProjectReference Include="..\Kartowka.Migrations\Kartowka.Migrations.csproj" />
+    <ProjectReference Include="..\Packs\Kartowka.Packs.Core\Kartowka.Packs.Core.csproj" />
     <ProjectReference Include="..\Registration\Kartowka.Registration.Core\Kartowka.Registration.Core.csproj" />
   </ItemGroup>
 

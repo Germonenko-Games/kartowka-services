@@ -18,6 +18,4 @@ public class Round
         ErrorMessageResourceName = "StringLength50"
     )]
     public string Name { get; set; } = string.Empty;
-
-    public List<QuestionsCategory>? Categories { get; set; }
 }
