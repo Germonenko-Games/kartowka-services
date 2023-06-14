@@ -7,6 +7,8 @@ public class Question
 {
     public long Id { get; set; }
 
+    public long? QuestionsCategoryId { get; set; }
+
     [Required(
         AllowEmptyStrings = false,
         ErrorMessageResourceType = typeof(CoreErrorMessages),

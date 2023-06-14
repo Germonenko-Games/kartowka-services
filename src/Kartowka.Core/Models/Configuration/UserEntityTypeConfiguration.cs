@@ -9,8 +9,7 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(user => user.Id);
 
-        builder.HasMany<Pack>()
-            .WithOne()
-            .HasForeignKey("AuthorId");
+        builder.HasIndex(user => user.Username).IsUnique();
+        builder.HasIndex(user => user.EmailAddress).IsUnique();
     }
 }

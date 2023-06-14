@@ -6,6 +6,8 @@ public class QuestionsCategory
 {
     public long Id { get; set; }
 
+    public long? RoundId { get; set; }
+
     [Range(0, int.MaxValue,
         ErrorMessageResourceType = typeof(CoreErrorMessages),
         ErrorMessageResourceName = "PositiveNumber"
@@ -22,6 +24,4 @@ public class QuestionsCategory
         ErrorMessageResourceName = "StringLength50"
     )]
     public string Name { get; set; } = string.Empty;
-
-    public List<Question>? Questions { get; set; }
 }

@@ -1,4 +1,5 @@
-﻿using Kartowka.Core.Models.Enums;
+﻿using System.Text.Json.Serialization;
+using Kartowka.Core.Models.Enums;
 using Kartowka.Core.Resources;
 
 namespace Kartowka.Core.Models;
@@ -26,5 +27,12 @@ public class Pack
 
     public DateTimeOffset UpdatedDate { get; set; }
 
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<QuestionsCategory>? QuestionsCategories { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<Question>? Questions { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<Round>? Rounds { get; set; }
 }
