@@ -13,15 +13,18 @@ public class PackEntityTypeConfiguration : IEntityTypeConfiguration<Pack>
 
         builder.HasMany(pack => pack.Rounds)
             .WithOne()
-            .HasForeignKey(PackIdPropertyName);
+            .HasForeignKey(PackIdPropertyName)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(pack => pack.QuestionsCategories)
             .WithOne()
-            .HasForeignKey(PackIdPropertyName);
+            .HasForeignKey(PackIdPropertyName)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(pack => pack.Questions)
             .WithOne()
-            .HasForeignKey(PackIdPropertyName);
+            .HasForeignKey(PackIdPropertyName)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne<User>()
             .WithMany()

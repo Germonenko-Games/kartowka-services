@@ -71,6 +71,12 @@ namespace Kartowka.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)")
+                        .HasColumnName("answer");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(400)
@@ -259,6 +265,7 @@ namespace Kartowka.Migrations
                     b.HasOne("Kartowka.Core.Models.QuestionsCategory", null)
                         .WithMany()
                         .HasForeignKey("QuestionsCategoryId")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_questions_questions_categories_questions_category_id");
                 });
 
@@ -274,6 +281,7 @@ namespace Kartowka.Migrations
                     b.HasOne("Kartowka.Core.Models.Round", null)
                         .WithMany()
                         .HasForeignKey("RoundId")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_questions_categories_rounds_round_id");
                 });
 

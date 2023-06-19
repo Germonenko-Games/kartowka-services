@@ -12,19 +12,30 @@ public class Question
     [Required(
         AllowEmptyStrings = false,
         ErrorMessageResourceType = typeof(CoreErrorMessages),
-        ErrorMessageResourceName = "Required"
+        ErrorMessageResourceName = nameof(CoreErrorMessages.Required)
     )]
     [StringLength(400,
         ErrorMessageResourceType = typeof(CoreErrorMessages),
-        ErrorMessageResourceName = "StringLength400"
+        ErrorMessageResourceName = nameof(CoreErrorMessages.StringLength400)
     )]
     public string Content { get; set; } = string.Empty;
 
     [Range(0, int.MaxValue,
         ErrorMessageResourceType = typeof(CoreErrorMessages),
-        ErrorMessageResourceName = "PositiveNumber"
+        ErrorMessageResourceName = nameof(CoreErrorMessages.PositiveNumber)
     )]
     public int Score { get; set; }
+
+    [Required(
+        AllowEmptyStrings = false,
+        ErrorMessageResourceType = typeof(CoreErrorMessages),
+        ErrorMessageResourceName = nameof(CoreErrorMessages.Required)
+    )]
+    [StringLength(400,
+        ErrorMessageResourceType = typeof(CoreErrorMessages),
+        ErrorMessageResourceName = nameof(CoreErrorMessages.StringLength400)
+    )]
+    public string Answer { get; set;} = string.Empty;
 
     public QuestionContentType ContentType { get; set; }
 

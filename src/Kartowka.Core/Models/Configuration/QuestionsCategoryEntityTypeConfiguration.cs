@@ -13,6 +13,7 @@ public class QuestionsCategoryEntityTypeConfiguration : IEntityTypeConfiguration
 
         builder.HasMany<Question>()
             .WithOne()
-            .HasForeignKey(question => question.QuestionsCategoryId);
+            .HasForeignKey(question => question.QuestionsCategoryId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }
