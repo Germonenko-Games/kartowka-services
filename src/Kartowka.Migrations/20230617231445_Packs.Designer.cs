@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Kartowka.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    [Migration("20230612202301_Packs")]
+    [Migration("20230617231445_Packs")]
     partial class Packs
     {
         /// <inheritdoc />
@@ -71,6 +71,12 @@ namespace Kartowka.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)")
+                        .HasColumnName("answer");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -260,6 +266,7 @@ namespace Kartowka.Migrations
                     b.HasOne("Kartowka.Core.Models.QuestionsCategory", null)
                         .WithMany()
                         .HasForeignKey("QuestionsCategoryId")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_questions_questions_categories_questions_category_id");
                 });
 
@@ -275,6 +282,7 @@ namespace Kartowka.Migrations
                     b.HasOne("Kartowka.Core.Models.Round", null)
                         .WithMany()
                         .HasForeignKey("RoundId")
+                        .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_questions_categories_rounds_round_id");
                 });
 

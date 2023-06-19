@@ -13,6 +13,7 @@ public class RoundEntityTypeConfiguration : IEntityTypeConfiguration<Round>
 
         builder.HasMany<QuestionsCategory>()
             .WithOne()
-            .HasForeignKey(category => category.RoundId);
+            .HasForeignKey(category => category.RoundId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

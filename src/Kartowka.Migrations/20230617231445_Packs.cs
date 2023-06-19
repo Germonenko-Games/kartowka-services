@@ -98,7 +98,8 @@ namespace Kartowka.Migrations
                         name: "fk_questions_categories_rounds_round_id",
                         column: x => x.round_id,
                         principalTable: "rounds",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -110,6 +111,7 @@ namespace Kartowka.Migrations
                     questions_category_id = table.Column<long>(type: "bigint", nullable: true),
                     content = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false),
                     score = table.Column<int>(type: "integer", nullable: false),
+                    answer = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false),
                     content_type = table.Column<int>(type: "integer", nullable: false),
                     question_type = table.Column<int>(type: "integer", nullable: false),
                     pack_id = table.Column<long>(type: "bigint", nullable: false)
@@ -127,7 +129,8 @@ namespace Kartowka.Migrations
                         name: "fk_questions_questions_categories_questions_category_id",
                         column: x => x.questions_category_id,
                         principalTable: "questions_categories",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(

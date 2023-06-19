@@ -1,11 +1,12 @@
-﻿using Kartowka.Core.Models.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using Kartowka.Core.Models.Enums;
 using Kartowka.Core.Resources;
 
-namespace Kartowka.Core.Models;
+namespace Kartowka.Packs.Core.Models;
 
-public class Question
+public class CreateQuestionDto
 {
-    public long Id { get; set; }
+    public long PackId { get; set; }
 
     public long? QuestionsCategoryId { get; set; }
 
