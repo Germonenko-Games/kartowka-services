@@ -1,4 +1,6 @@
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Kartowka.Api.Extensions;
 using Kartowka.Api.HostedServices;
 using Kartowka.Api.Middleware;
@@ -25,13 +27,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Security:Jwt"));
 builder.Services.Configure<PacksOptions>(builder.Configuration.GetSection("Packs"));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().
+    AddJsonOptions(options =>
+    {
+        var stringToEnumConverter = new JsonStringEnumConverter(JsonNamingPolicy.CamelCase);
+        options.JsonSerializerOptions.Converters.Add(stringToEnumConverter);
+    });
 builder.Services.AddFeatureManagement();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddLocalization();
@@ -125,13 +133,23 @@ builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 builder.Services.AddScoped<RequestBufferingMiddleware>();
 builder.Services.AddScoped<KartowkaExceptionsHandlingMiddleware>();
 builder.Services.AddScoped<IPacksService, PacksService>();
+builder.Services.AddScoped<IRoundsService, RoundsService>();
+builder.Services.AddScoped<IQuestionsService, QuestionsService>();
+builder.Services.AddScoped<IQuestionsCategoriesService, QuestionsCategoriesService>();
 builder.Services.AddScoped<IAsyncValidator<Pack>, PackAuthorValidator>();
 builder.Services.AddScoped<IAsyncValidator<Pack>, UserPacksLimitValidator>();
+builder.Services.AddScoped<IAsyncValidator<Pack>, PackQuestionsLimitValidator>();
+builder.Services.AddScoped<IAsyncValidator<Pack>, PackRoundsLimitValidator>();
+builder.Services.AddScoped<IAsyncValidator<Pack>, PackQuestionsCategoriesLimitValidator>();
+builder.Services.AddScoped<IAsyncValidator<Question>, QuestionContentTypeValidator>();
 
-    var app = builder.Build();
+var app = builder.Build();
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options =>
+{
+    options.DocExpansion(DocExpansion.None);
+});
 
 app.UseRequestLocalization();
 app.UseHttpsRedirection();

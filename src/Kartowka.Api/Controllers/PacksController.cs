@@ -31,7 +31,8 @@ public class PacksController : ControllerBase
     )]
     public async Task<ActionResult<Pack>> GetPackAsync(
         [FromRoute] long packId,
-        [FromQuery] ICollection<PackProperties>? includeProperties
+        [FromQuery, SwaggerParameter("Specifies what related entities should be pulled as well.")]
+        ICollection<PackProperties>? includeProperties
     )
     {
         var pack = await _packsService.GetPackAsync(packId, includeProperties);
@@ -68,7 +69,7 @@ public class PacksController : ControllerBase
     }
 
     [HttpDelete("{packId:long}")]
-    [SwaggerOperation("Removes a pack with a given ID.")]
+    [SwaggerOperation("Removes a pack with a given ID.", "This endpoint is idempotent.")]
     [SwaggerResponse(StatusCodes.Status204NoContent, "No content success result")]
     public async Task<NoContentResult> RemovePackAsync([FromRoute] long packId)
     {

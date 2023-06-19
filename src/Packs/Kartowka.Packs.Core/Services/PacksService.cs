@@ -15,26 +15,28 @@ public class PacksService : IPacksService
 {
     private readonly CoreContext _context;
 
-    private readonly IAsyncValidatorsRunner<Pack> _validatorsRunner;
+    private readonly IAsyncValidatorsRunner<Pack> _packValidatorsRunner;
 
     private readonly IStringLocalizer<PacksErrorMessages> _stringLocalizer;
 
     public PacksService(
         CoreContext context,
-        IAsyncValidatorsRunner<Pack> validatorsRunner,
+        IAsyncValidatorsRunner<Pack> packValidatorsRunner,
         IStringLocalizer<PacksErrorMessages> stringLocalizer
     )
     {
         _context = context;
-        _validatorsRunner = validatorsRunner;
+        _packValidatorsRunner = packValidatorsRunner;
         _stringLocalizer = stringLocalizer;
     }
 
     public async Task<Pack> GetPackAsync(long packId, ICollection<PackProperties>? includeProperties = null)
     {
         var packQuery = _context.Packs.Where(p => p.Id == packId);
-        if (includeProperties is not null)
+        if (includeProperties is not null && includeProperties.Any())
         {
+            packQuery = packQuery.AsSplitQuery();
+
             if (includeProperties.Contains(PackProperties.Rounds))
             {
                 packQuery = packQuery.Include(pack => pack.Rounds);
@@ -94,6 +96,8 @@ public class PacksService : IPacksService
             pack.Name = packDto.Name;
         }
 
+        await EnsurePackIsValid(pack);
+
         await _context.SaveChangesAsync();
         return pack;
     }
@@ -106,6 +110,8 @@ public class PacksService : IPacksService
             return false;
         }
 
+        // Related tables have OnDelete behavior set to Cascade
+        // So there's no need to manually remove them
         _context.Packs.Remove(pack);
         await _context.SaveChangesAsync();
 
@@ -115,6 +121,6 @@ public class PacksService : IPacksService
     private async Task EnsurePackIsValid(Pack pack)
     {
         var message = _stringLocalizer[nameof(PacksErrorMessages.PackDataIsInvalid)];
-        await _validatorsRunner.EnsureValidAsync(pack, message);
+        await _packValidatorsRunner.EnsureValidAsync(pack, message);
     }
 }
