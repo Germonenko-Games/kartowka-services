@@ -11,7 +11,7 @@ public class PackEntityTypeConfiguration : IEntityTypeConfiguration<Pack>
     {
         builder.HasKey(pack => pack.Id);
 
-        builder.HasMany(pack => pack.Rounds)
+        builder.HasMany(pack => pack.Assets)
             .WithOne()
             .HasForeignKey(PackIdPropertyName)
             .OnDelete(DeleteBehavior.Cascade);
@@ -22,6 +22,11 @@ public class PackEntityTypeConfiguration : IEntityTypeConfiguration<Pack>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(pack => pack.Questions)
+            .WithOne()
+            .HasForeignKey(PackIdPropertyName)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(pack => pack.Rounds)
             .WithOne()
             .HasForeignKey(PackIdPropertyName)
             .OnDelete(DeleteBehavior.Cascade);

@@ -39,6 +39,7 @@ namespace Kartowka.Migrations
                     author_id = table.Column<int>(type: "integer", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    description = table.Column<string>(type: "text", nullable: false),
                     created_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
@@ -49,6 +50,30 @@ namespace Kartowka.Migrations
                         name: "fk_packs_users_user_id",
                         column: x => x.author_id,
                         principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "assets",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    display_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    system_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    size = table.Column<long>(type: "bigint", nullable: false),
+                    asset_type = table.Column<int>(type: "integer", nullable: false),
+                    blob_url = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false),
+                    pack_id = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_assets", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_assets_packs_pack_id",
+                        column: x => x.pack_id,
+                        principalTable: "packs",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -109,16 +134,23 @@ namespace Kartowka.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     questions_category_id = table.Column<long>(type: "bigint", nullable: true),
-                    content = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false),
+                    question_text = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
                     score = table.Column<int>(type: "integer", nullable: false),
                     answer = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: false),
                     content_type = table.Column<int>(type: "integer", nullable: false),
                     question_type = table.Column<int>(type: "integer", nullable: false),
+                    asset_id = table.Column<long>(type: "bigint", nullable: true),
                     pack_id = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_questions", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_questions_assets_asset_id",
+                        column: x => x.asset_id,
+                        principalTable: "assets",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "fk_questions_packs_pack_id",
                         column: x => x.pack_id,
@@ -134,9 +166,20 @@ namespace Kartowka.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "ix_assets_pack_id",
+                table: "assets",
+                column: "pack_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_packs_author_id",
                 table: "packs",
                 column: "author_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_questions_asset_id",
+                table: "questions",
+                column: "asset_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_questions_pack_id",
@@ -181,6 +224,9 @@ namespace Kartowka.Migrations
         {
             migrationBuilder.DropTable(
                 name: "questions");
+
+            migrationBuilder.DropTable(
+                name: "assets");
 
             migrationBuilder.DropTable(
                 name: "questions_categories");

@@ -10,6 +10,8 @@ public class CoreContext : DbContext
     {
     }
 
+    public DbSet<Asset> Assets => Set<Asset>();
+
     public DbSet<Pack> Packs => Set<Pack>();
 
     public DbSet<Question> Questions => Set<Question>();
@@ -22,6 +24,7 @@ public class CoreContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new AssetEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new PackEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new QuestionEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new QuestionsCategoryEntityTypeConfiguration());

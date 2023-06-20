@@ -10,5 +10,12 @@ public class QuestionEntityTypeConfiguration : IEntityTypeConfiguration<Question
         builder.HasKey(question => question.Id);
 
         builder.Property<long>("PackId");
+
+        builder.Property<long?>("AssetId");
+
+        builder.HasOne(question => question.Asset)
+            .WithOne()
+            .HasForeignKey<Question>("AssetId")
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }
