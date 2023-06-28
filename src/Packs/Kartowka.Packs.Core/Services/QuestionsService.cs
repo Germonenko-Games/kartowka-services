@@ -15,16 +15,16 @@ public class QuestionsService : IQuestionsService
 {
     private readonly CoreContext _context;
 
-    private readonly IAsyncValidatorsRunner<Question> _questionValidatorsRunner;
+    private readonly IValidatorsRunner<Question> _questionValidatorsRunner;
 
-    private readonly IAsyncValidatorsRunner<Pack> _packValidatorsRunner;
+    private readonly IValidatorsRunner<Pack> _packValidatorsRunner;
 
     private readonly IStringLocalizer<PacksErrorMessages> _stringLocalizer;
 
     public QuestionsService(
         CoreContext context,
-        IAsyncValidatorsRunner<Question> questionValidatorsRunner,
-        IAsyncValidatorsRunner<Pack> packValidatorsRunner,
+        IValidatorsRunner<Question> questionValidatorsRunner,
+        IValidatorsRunner<Pack> packValidatorsRunner,
         IStringLocalizer<PacksErrorMessages> stringLocalizer
     )
     {
@@ -59,7 +59,28 @@ public class QuestionsService : IQuestionsService
             throw new KartowkaException(message);
         }
 
-        var question = questionDto.ToQuestion();
+        var question = new Question
+        {
+            QuestionsCategoryId = questionDto.QuestionsCategoryId,
+            Answer = questionDto.Answer,
+            Score = questionDto.Score,
+            ContentType = questionDto.ContentType,
+            QuestionType = questionDto.QuestionType,
+            QuestionText = questionDto.QuestionText,
+        };
+
+        if (questionDto.AssetId != null)
+        {
+            var asset = await _context.Assets.FindAsync(questionDto.AssetId);
+            if (asset is null)
+            {
+                var message = _stringLocalizer.GetString(nameof(PacksErrorMessages.AssetNotFound));
+                throw new KartowkaException(message);
+            }
+
+            question.Asset = asset;
+        }
+
         pack.Questions ??= new ();
         pack.Questions.Add(question);
 
@@ -73,7 +94,10 @@ public class QuestionsService : IQuestionsService
 
     public async Task<Question> UpdateQuestionAsync(long questionId, UpdateQuestionDto questionDto)
     {
-        var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == questionId);
+        var question = await _context.Questions
+            .Include(q => q.Asset)
+            .FirstOrDefaultAsync(q => q.Id == questionId);
+
         if (question is null)
         {
             var message = _stringLocalizer[nameof(PacksErrorMessages.QuestionNotFound)];
@@ -81,6 +105,23 @@ public class QuestionsService : IQuestionsService
         }
 
         question.CopyFrom(questionDto);
+
+        if (questionDto.AssetId is not null && questionDto.AssetId != 0)
+        {
+            var asset = await _context.Assets.FindAsync(questionDto.AssetId);
+            if (asset is null)
+            {
+                var message = _stringLocalizer.GetString(nameof(PacksErrorMessages.AssetNotFound));
+                throw new KartowkaException(message);
+            }
+
+            question.Asset = asset;
+        }
+        else if (questionDto.AssetId == 0)
+        {
+            question.Asset = null;
+        }
+
         await EnsureQuestionIsValid(question);
 
         await _context.SaveChangesAsync();

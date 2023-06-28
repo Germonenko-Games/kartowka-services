@@ -20,7 +20,7 @@ public class RoundsController : ControllerBase
     }
 
     [HttpPost("")]
-    [SwaggerOperation("Creates a new round")]
+    [SwaggerOperation("Create a new round")]
     [SwaggerResponse(
         StatusCodes.Status200OK,
         "New round object",
@@ -42,7 +42,7 @@ public class RoundsController : ControllerBase
     }
 
     [HttpPatch("{roundId:long}")]
-    [SwaggerOperation("Updates a round")]
+    [SwaggerOperation("Update a round")]
     [SwaggerResponse(
         StatusCodes.Status200OK,
         "Updated round object",
@@ -71,10 +71,10 @@ public class RoundsController : ControllerBase
     }
 
     [HttpDelete("{roundId:long}")]
-    [SwaggerOperation("Removes roundId with a give ID.", "This endpoint is idempotent.")]
-    public async Task<NoContentResult> RemoveRoundAsync([FromRoute] long roundIdId)
+    [SwaggerOperation("Remove a round", "This endpoint is idempotent.")]
+    public async Task<NoContentResult> RemoveRoundAsync([FromRoute] long roundId)
     {
-        await _roundsService.RemoveRoundAsync(roundIdId);
+        await _roundsService.RemoveRoundAsync(roundId);
         return NoContent();
     }
 }

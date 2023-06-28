@@ -15,17 +15,27 @@ public class Pack
     [Required(
         AllowEmptyStrings = false,
         ErrorMessageResourceType = typeof(CoreErrorMessages),
-        ErrorMessageResourceName = "Required"
+        ErrorMessageResourceName = nameof(CoreErrorMessages.Required)
     )]
     [StringLength(50,
         ErrorMessageResourceType = typeof(CoreErrorMessages),
-        ErrorMessageResourceName = "StringLength50"
+        ErrorMessageResourceName = nameof(CoreErrorMessages.StringLength50)
     )]
     public string Name { get; set; } = string.Empty;
+
+    [Required(
+        AllowEmptyStrings = true,
+        ErrorMessageResourceType = typeof(CoreErrorMessages),
+        ErrorMessageResourceName = nameof(CoreErrorMessages.Required)
+    )]
+    public string Description { get; set; } = string.Empty;
 
     public DateTimeOffset CreatedDate { get; set; }
 
     public DateTimeOffset UpdatedDate { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<Asset>? Assets { get; set; }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public List<QuestionsCategory>? QuestionsCategories { get; set; }

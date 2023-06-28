@@ -10,11 +10,18 @@ public class CreatePackDto
     [Required(
         AllowEmptyStrings = false,
         ErrorMessageResourceType = typeof(CoreErrorMessages),
-        ErrorMessageResourceName = "Required"
+        ErrorMessageResourceName = nameof(CoreErrorMessages.Required)
     )]
     [StringLength(50,
         ErrorMessageResourceType = typeof(CoreErrorMessages),
-        ErrorMessageResourceName = "StringLength50"
+        ErrorMessageResourceName = nameof(CoreErrorMessages.StringLength50)
     )]
     public string Name { get; set; } = string.Empty;
+
+    [Required(
+        AllowEmptyStrings = true,
+        ErrorMessageResourceType = typeof(CoreErrorMessages),
+        ErrorMessageResourceName = nameof(CoreErrorMessages.Required)
+    )]
+    public string Description { get; set; } = string.Empty;
 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Kartowka.Migrations
 {
     [DbContext(typeof(CoreContext))]
-    [Migration("20230617231445_Packs")]
+    [Migration("20230621192302_Packs")]
     partial class Packs
     {
         /// <inheritdoc />
@@ -22,6 +22,54 @@ namespace Kartowka.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Kartowka.Core.Models.Asset", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("AssetType")
+                        .HasColumnType("integer")
+                        .HasColumnName("asset_type");
+
+                    b.Property<string>("BlobUrl")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)")
+                        .HasColumnName("blob_url");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("display_name");
+
+                    b.Property<long>("PackId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("pack_id");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint")
+                        .HasColumnName("size");
+
+                    b.Property<string>("SystemName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("system_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_assets");
+
+                    b.HasIndex("PackId")
+                        .HasDatabaseName("ix_assets_pack_id");
+
+                    b.ToTable("assets", (string)null);
+                });
 
             modelBuilder.Entity("Kartowka.Core.Models.Pack", b =>
                 {
@@ -39,6 +87,11 @@ namespace Kartowka.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_date");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -78,11 +131,9 @@ namespace Kartowka.Migrations
                         .HasColumnType("character varying(400)")
                         .HasColumnName("answer");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("character varying(400)")
-                        .HasColumnName("content");
+                    b.Property<long?>("AssetId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("asset_id");
 
                     b.Property<int>("ContentType")
                         .HasColumnType("integer")
@@ -91,6 +142,11 @@ namespace Kartowka.Migrations
                     b.Property<long>("PackId")
                         .HasColumnType("bigint")
                         .HasColumnName("pack_id");
+
+                    b.Property<string>("QuestionText")
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)")
+                        .HasColumnName("question_text");
 
                     b.Property<int>("QuestionType")
                         .HasColumnType("integer")
@@ -106,6 +162,10 @@ namespace Kartowka.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_questions");
+
+                    b.HasIndex("AssetId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_questions_asset_id");
 
                     b.HasIndex("PackId")
                         .HasDatabaseName("ix_questions_pack_id");
@@ -244,6 +304,16 @@ namespace Kartowka.Migrations
                     b.ToTable("users", (string)null);
                 });
 
+            modelBuilder.Entity("Kartowka.Core.Models.Asset", b =>
+                {
+                    b.HasOne("Kartowka.Core.Models.Pack", null)
+                        .WithMany("Assets")
+                        .HasForeignKey("PackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_assets_packs_pack_id");
+                });
+
             modelBuilder.Entity("Kartowka.Core.Models.Pack", b =>
                 {
                     b.HasOne("Kartowka.Core.Models.User", null)
@@ -256,6 +326,12 @@ namespace Kartowka.Migrations
 
             modelBuilder.Entity("Kartowka.Core.Models.Question", b =>
                 {
+                    b.HasOne("Kartowka.Core.Models.Asset", "Asset")
+                        .WithOne()
+                        .HasForeignKey("Kartowka.Core.Models.Question", "AssetId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_questions_assets_asset_id");
+
                     b.HasOne("Kartowka.Core.Models.Pack", null)
                         .WithMany("Questions")
                         .HasForeignKey("PackId")
@@ -268,6 +344,8 @@ namespace Kartowka.Migrations
                         .HasForeignKey("QuestionsCategoryId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .HasConstraintName("fk_questions_questions_categories_questions_category_id");
+
+                    b.Navigation("Asset");
                 });
 
             modelBuilder.Entity("Kartowka.Core.Models.QuestionsCategory", b =>
@@ -298,6 +376,8 @@ namespace Kartowka.Migrations
 
             modelBuilder.Entity("Kartowka.Core.Models.Pack", b =>
                 {
+                    b.Navigation("Assets");
+
                     b.Navigation("Questions");
 
                     b.Navigation("QuestionsCategories");

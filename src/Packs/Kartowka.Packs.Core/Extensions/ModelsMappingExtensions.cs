@@ -5,19 +5,6 @@ namespace Kartowka.Packs.Core.Extensions;
 
 public static class ModelsMappingExtensions
 {
-    public static Question ToQuestion(this CreateQuestionDto questionDto)
-    {
-        return new()
-        {
-            QuestionsCategoryId = questionDto.QuestionsCategoryId,
-            Content = questionDto.Content,
-            Answer = questionDto.Answer,
-            Score = questionDto.Score,
-            ContentType = questionDto.ContentType,
-            QuestionType = questionDto.QuestionType,
-        };
-    }
-
     public static Round ToRound(this CreateRoundDto roundDto)
     {
         return new()
@@ -81,9 +68,9 @@ public static class ModelsMappingExtensions
                 : questionDto.QuestionsCategoryId;
         }
 
-        if (questionDto.Content is not null)
+        if (questionDto.QuestionText is not null)
         {
-            question.Content = questionDto.Content;
+            question.QuestionText = questionDto.QuestionText;
         }
 
         if (questionDto.ContentType is not null)

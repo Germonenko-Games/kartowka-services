@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solutionItems", "solutionItems", "{9E231C2E-ED7D-4A85-9CF6-EBF764220EBF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9E231C2E-ED7D-4A85-9CF6-EBF764220EBF}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{63AEB6F9-C6B8-4580-9D3A-7933E1C285C6}"
 EndProject
@@ -33,15 +37,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kartowka.Registration.Core"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kartowka.Common.Validation", "src\Common\Kartowka.Common.Validation\Kartowka.Common.Validation.csproj", "{0AB2A21F-6AA6-490F-AA56-F356C6574AB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kartowka.Authorization.Tests", "tests\Kartowka.Authorization.Tests\Kartowka.Authorization.Tests.csproj", "{4A3871C2-5BA3-45F6-9AAA-47105D2744A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kartowka.Authorization.Tests", "tests\Kartowka.Authorization.Tests\Kartowka.Authorization.Tests.csproj", "{4A3871C2-5BA3-45F6-9AAA-47105D2744A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kartowka.Registration.Tests", "tests\Kartowka.Registration.Tests\Kartowka.Registration.Tests.csproj", "{D9E9BA6C-F62B-4FCE-A084-4575B861DD3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kartowka.Registration.Tests", "tests\Kartowka.Registration.Tests\Kartowka.Registration.Tests.csproj", "{D9E9BA6C-F62B-4FCE-A084-4575B861DD3B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packs", "Packs", "{D061A2DE-B175-4C69-BB0A-3EDE54DFC684}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kartowka.Packs.Core", "src\Packs\Kartowka.Packs.Core\Kartowka.Packs.Core.csproj", "{CEFF2BAB-7BC5-4164-AFAB-8F442A351D5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kartowka.Packs.Core", "src\Packs\Kartowka.Packs.Core\Kartowka.Packs.Core.csproj", "{CEFF2BAB-7BC5-4164-AFAB-8F442A351D5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kartowka.Common.Localization", "src\Common\Kartowka.Common.Localization\Kartowka.Common.Localization.csproj", "{D70069D3-C2A3-44EA-A32D-2F72A6F538D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kartowka.Common.Blobs", "src\Common\Kartowka.Common.Blobs\Kartowka.Common.Blobs.csproj", "{236FC6B6-32FF-4834-BCF2-6206F334ED6F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kartowka.Common.Blobs.Azure", "src\Common\Kartowka.Common.Blobs.Azure\Kartowka.Common.Blobs.Azure.csproj", "{C6826B8D-4B1E-4FDD-8931-2BFC86231BF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,10 +103,14 @@ Global
 		{CEFF2BAB-7BC5-4164-AFAB-8F442A351D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEFF2BAB-7BC5-4164-AFAB-8F442A351D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEFF2BAB-7BC5-4164-AFAB-8F442A351D5E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D70069D3-C2A3-44EA-A32D-2F72A6F538D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D70069D3-C2A3-44EA-A32D-2F72A6F538D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D70069D3-C2A3-44EA-A32D-2F72A6F538D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D70069D3-C2A3-44EA-A32D-2F72A6F538D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{236FC6B6-32FF-4834-BCF2-6206F334ED6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{236FC6B6-32FF-4834-BCF2-6206F334ED6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{236FC6B6-32FF-4834-BCF2-6206F334ED6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{236FC6B6-32FF-4834-BCF2-6206F334ED6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6826B8D-4B1E-4FDD-8931-2BFC86231BF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6826B8D-4B1E-4FDD-8931-2BFC86231BF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6826B8D-4B1E-4FDD-8931-2BFC86231BF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6826B8D-4B1E-4FDD-8931-2BFC86231BF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,7 +132,8 @@ Global
 		{D9E9BA6C-F62B-4FCE-A084-4575B861DD3B} = {B2B3AFDF-7881-497E-B296-637929AECD03}
 		{D061A2DE-B175-4C69-BB0A-3EDE54DFC684} = {63AEB6F9-C6B8-4580-9D3A-7933E1C285C6}
 		{CEFF2BAB-7BC5-4164-AFAB-8F442A351D5E} = {D061A2DE-B175-4C69-BB0A-3EDE54DFC684}
-		{D70069D3-C2A3-44EA-A32D-2F72A6F538D6} = {209F91EA-8989-43F0-B6D8-0B9C2ECB02B2}
+		{236FC6B6-32FF-4834-BCF2-6206F334ED6F} = {209F91EA-8989-43F0-B6D8-0B9C2ECB02B2}
+		{C6826B8D-4B1E-4FDD-8931-2BFC86231BF5} = {209F91EA-8989-43F0-B6D8-0B9C2ECB02B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {64B3685F-02C0-42AA-8B50-69E273EC7AC3}

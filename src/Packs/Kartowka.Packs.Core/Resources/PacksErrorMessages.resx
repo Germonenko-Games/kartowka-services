@@ -132,9 +132,6 @@
   <data name="QuestionDataIsInvalid" xml:space="preserve">
     <value>Question data is invalid.</value>
   </data>
-  <data name="QuestionTypeIsUnsupported" xml:space="preserve">
-    <value>Question type is unsupported.</value>
-  </data>
   <data name="QuestionNotFound" xml:space="preserve">
     <value>Question with the given ID was not found.</value>
   </data>
@@ -155,5 +152,26 @@
   </data>
   <data name="PackQuestionsCategoriesLimitExceeded" xml:space="preserve">
     <value>Questions categories number per pack exceeded. Max number of categories allowed per pack is {0}.</value>
+  </data>
+  <data name="QuestionTextIsRequired" xml:space="preserve">
+    <value>Question text is required for questions with the 'Text' content type.</value>
+  </data>
+  <data name="AssetIsRequired" xml:space="preserve">
+    <value>Asset is required for questions with 'Image' and 'Music' types.</value>
+  </data>
+  <data name="ImageQuestionContentIsInvalid" xml:space="preserve">
+    <value>Question if type 'Image' should have a valid image asset attached to it.</value>
+  </data>
+  <data name="MusicQuestionContentIsInvalid" xml:space="preserve">
+    <value>Question if type 'Music' should have a valid music asset attached to it.</value>
+  </data>
+  <data name="AssetsStorageLimitExceeded" xml:space="preserve">
+    <value>Assets storage limit exceeded.</value>
+  </data>
+  <data name="AssetMimeTypeIsUnsupported" xml:space="preserve">
+    <value>The given mime type is unsupported. Supported mime types are image/jpeg, image/png, audio/mpeg and audio/ogg.</value>
+  </data>
+  <data name="AssetNotFound" xml:space="preserve">
+    <value>Asset with the given ID was not found.</value>
   </data>
 </root>

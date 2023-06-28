@@ -1,4 +1,5 @@
-﻿using Kartowka.Core.Models.Enums;
+﻿using System.Text.Json.Serialization;
+using Kartowka.Core.Models.Enums;
 using Kartowka.Core.Resources;
 
 namespace Kartowka.Core.Models;
@@ -9,16 +10,11 @@ public class Question
 
     public long? QuestionsCategoryId { get; set; }
 
-    [Required(
-        AllowEmptyStrings = false,
-        ErrorMessageResourceType = typeof(CoreErrorMessages),
-        ErrorMessageResourceName = nameof(CoreErrorMessages.Required)
-    )]
     [StringLength(400,
         ErrorMessageResourceType = typeof(CoreErrorMessages),
         ErrorMessageResourceName = nameof(CoreErrorMessages.StringLength400)
     )]
-    public string Content { get; set; } = string.Empty;
+    public string? QuestionText { get; set; } = string.Empty;
 
     [Range(0, int.MaxValue,
         ErrorMessageResourceType = typeof(CoreErrorMessages),
@@ -40,4 +36,7 @@ public class Question
     public QuestionContentType ContentType { get; set; }
 
     public QuestionType QuestionType { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Asset? Asset { get; set; }
 }

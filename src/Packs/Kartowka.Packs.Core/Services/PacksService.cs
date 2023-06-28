@@ -15,13 +15,13 @@ public class PacksService : IPacksService
 {
     private readonly CoreContext _context;
 
-    private readonly IAsyncValidatorsRunner<Pack> _packValidatorsRunner;
+    private readonly IValidatorsRunner<Pack> _packValidatorsRunner;
 
     private readonly IStringLocalizer<PacksErrorMessages> _stringLocalizer;
 
     public PacksService(
         CoreContext context,
-        IAsyncValidatorsRunner<Pack> packValidatorsRunner,
+        IValidatorsRunner<Pack> packValidatorsRunner,
         IStringLocalizer<PacksErrorMessages> stringLocalizer
     )
     {
@@ -37,19 +37,26 @@ public class PacksService : IPacksService
         {
             packQuery = packQuery.AsSplitQuery();
 
-            if (includeProperties.Contains(PackProperties.Rounds))
+            if (includeProperties.Contains(PackProperties.Assets))
             {
-                packQuery = packQuery.Include(pack => pack.Rounds);
-            }
-
-            if (includeProperties.Contains(PackProperties.Questions))
-            {
-                packQuery = packQuery.Include(pack => pack.Questions);
+                packQuery = packQuery.Include(pack => pack.Assets);
             }
 
             if (includeProperties.Contains(PackProperties.Categories))
             {
                 packQuery = packQuery.Include(pack => pack.QuestionsCategories);
+            }
+
+            if (includeProperties.Contains(PackProperties.Questions))
+            {
+                packQuery = packQuery
+                    .Include(pack => pack.Questions!)
+                    .ThenInclude(question => question.Asset);
+            }
+
+            if (includeProperties.Contains(PackProperties.Rounds))
+            {
+                packQuery = packQuery.Include(pack => pack.Rounds);
             }
         }
 
@@ -58,6 +65,16 @@ public class PacksService : IPacksService
         {
             var message = _stringLocalizer[nameof(PacksErrorMessages.PackNotFound)];
             throw new KartowkaNotFoundException(message);
+        }
+
+        // If questions are to be included
+        // then .ThenInclude(question => question.Asset) call
+        // will include assets for a pack as well.
+        // So we need to discard assets manually.
+        // TODO: find out how this can be done in a more elegant way.
+        if (includeProperties is not null && !includeProperties.Contains(PackProperties.Assets))
+        {
+            pack.Assets = null;
         }
 
         return pack;
@@ -70,6 +87,7 @@ public class PacksService : IPacksService
         {
             AuthorId = packDto.AuthorId,
             Name = packDto.Name,
+            Description = packDto.Description,
             CreatedDate = now,
             UpdatedDate = now,
         };
@@ -96,6 +114,11 @@ public class PacksService : IPacksService
             pack.Name = packDto.Name;
         }
 
+        if (packDto.Description is not null)
+        {
+            pack.Description = packDto.Description;
+        }
+
         await EnsurePackIsValid(pack);
 
         await _context.SaveChangesAsync();
@@ -114,6 +137,8 @@ public class PacksService : IPacksService
         // So there's no need to manually remove them
         _context.Packs.Remove(pack);
         await _context.SaveChangesAsync();
+        
+        // TODO: Remove related assets as well.
 
         return true;
     }

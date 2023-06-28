@@ -10,7 +10,7 @@ namespace Kartowka.Api.Controllers;
 public class AuthorizationController : ControllerBase
 {
     [HttpPost("")]
-    [SwaggerOperation("Performs user authorization and returns an access token.")]
+    [SwaggerOperation("Authorize a user by login and password")]
     [SwaggerResponse(StatusCodes.Status200OK, "Access token.", typeof(TokenInfo), MediaTypeNames.Application.Json)]
     [SwaggerResponse(
         StatusCodes.Status400BadRequest,

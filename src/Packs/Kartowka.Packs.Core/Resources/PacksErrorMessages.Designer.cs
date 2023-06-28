@@ -61,6 +61,60 @@ namespace Kartowka.Packs.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Asset is required for questions with &apos;Image&apos; and &apos;Music&apos; types..
+        /// </summary>
+        public static string AssetIsRequired {
+            get {
+                return ResourceManager.GetString("AssetIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The given mime type is unsupported. Supported mime types are image/jpeg, image/png, audio/mpeg and audio/ogg..
+        /// </summary>
+        public static string AssetMimeTypeIsUnsupported {
+            get {
+                return ResourceManager.GetString("AssetMimeTypeIsUnsupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asset with the given ID was not found..
+        /// </summary>
+        public static string AssetNotFound {
+            get {
+                return ResourceManager.GetString("AssetNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assets storage limit exceeded..
+        /// </summary>
+        public static string AssetsStorageLimitExceeded {
+            get {
+                return ResourceManager.GetString("AssetsStorageLimitExceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question if type &apos;Image&apos; should have a valid image asset attached to it..
+        /// </summary>
+        public static string ImageQuestionContentIsInvalid {
+            get {
+                return ResourceManager.GetString("ImageQuestionContentIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question if type &apos;Music&apos; should have a valid music asset attached to it..
+        /// </summary>
+        public static string MusicQuestionContentIsInvalid {
+            get {
+                return ResourceManager.GetString("MusicQuestionContentIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pack data is invalid..
         /// </summary>
         public static string PackDataIsInvalid {
@@ -142,11 +196,11 @@ namespace Kartowka.Packs.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question type is unsupported..
+        ///   Looks up a localized string similar to Question text is required for questions with the &apos;Text&apos; content type..
         /// </summary>
-        public static string QuestionTypeIsUnsupported {
+        public static string QuestionTextIsRequired {
             get {
-                return ResourceManager.GetString("QuestionTypeIsUnsupported", resourceCulture);
+                return ResourceManager.GetString("QuestionTextIsRequired", resourceCulture);
             }
         }
         
