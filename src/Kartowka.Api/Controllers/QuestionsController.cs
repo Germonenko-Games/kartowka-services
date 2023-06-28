@@ -42,7 +42,7 @@ public class QuestionsController : ControllerBase
     }
 
     [HttpGet("{questionId:long}")]
-    [SwaggerOperation("Gets question by an ID.")]
+    [SwaggerOperation("Get question by ID")]
     [SwaggerResponse(StatusCodes.Status200OK, "Question model", typeof(Question), MediaTypeNames.Application.Json)]
     [SwaggerResponse(
         StatusCodes.Status404NotFound,
@@ -57,7 +57,7 @@ public class QuestionsController : ControllerBase
     }
 
     [HttpPatch("{questionId:long}")]
-    [SwaggerOperation("Updates a question")]
+    [SwaggerOperation("Update a question")]
     [SwaggerResponse(
         StatusCodes.Status200OK,
         "Updated question object",
@@ -86,7 +86,7 @@ public class QuestionsController : ControllerBase
     }
 
     [HttpDelete("{questionId:long}")]
-    [SwaggerOperation("Removes question with a give ID.", "This endpoint is idempotent.")]
+    [SwaggerOperation("Removes a question", "This endpoint is idempotent.")]
     public async Task<NoContentResult> RemoveQuestionAsync([FromRoute] long questionId)
     {
         await _questionsService.RemoveQuestionAsync(questionId);

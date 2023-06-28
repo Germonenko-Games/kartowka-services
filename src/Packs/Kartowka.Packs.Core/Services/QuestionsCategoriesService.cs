@@ -15,16 +15,16 @@ public class QuestionsCategoriesService : IQuestionsCategoriesService
 {
     private readonly CoreContext _context;
 
-    private readonly IAsyncValidatorsRunner<Pack> _packValidatorsRunner;
+    private readonly IValidatorsRunner<Pack> _packValidatorsRunner;
 
-    private readonly IAsyncValidatorsRunner<QuestionsCategory> _questionsCategoryValidatorsRunner;
+    private readonly IValidatorsRunner<QuestionsCategory> _questionsCategoryValidatorsRunner;
 
     private readonly IStringLocalizer<PacksErrorMessages> _stringLocalizer;
 
     public QuestionsCategoriesService(
         CoreContext context,
-        IAsyncValidatorsRunner<Pack> packValidatorsRunner,
-        IAsyncValidatorsRunner<QuestionsCategory> questionsCategoryValidatorsRunner,
+        IValidatorsRunner<Pack> packValidatorsRunner,
+        IValidatorsRunner<QuestionsCategory> questionsCategoryValidatorsRunner,
         IStringLocalizer<PacksErrorMessages> stringLocalizer
     )
     {

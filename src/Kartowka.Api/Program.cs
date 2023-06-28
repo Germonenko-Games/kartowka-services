@@ -4,11 +4,14 @@ using System.Text.Json.Serialization;
 using Kartowka.Api.Extensions;
 using Kartowka.Api.HostedServices;
 using Kartowka.Api.Middleware;
+using Kartowka.Api.Options;
 using Kartowka.Authorization.Core.Contracts;
 using Kartowka.Authorization.Core.Services;
 using Kartowka.Authorization.Core.Services.Abstractions;
 using Kartowka.Authorization.Infrastructure.Contracts;
 using Kartowka.Authorization.Infrastructure.Options;
+using Kartowka.Common.Blobs;
+using Kartowka.Common.Blobs.Azure;
 using Kartowka.Common.Crypto;
 using Kartowka.Common.Crypto.Abstractions;
 using Kartowka.Common.Validation;
@@ -24,6 +27,8 @@ using Kartowka.Registration.Core.Services.Abstractions;
 using Kartowka.Registration.Core.Services.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -31,11 +36,30 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var appConfigurationConnectionString = builder.Configuration.GetConnectionString("AzureAppConfiguration");
+if (!string.IsNullOrEmpty(appConfigurationConnectionString))
+{
+    builder.Configuration.AddAzureAppConfiguration(options =>
+    {
+        options.Connect(appConfigurationConnectionString)
+            .Select(KeyFilter.Any)
+            .Select(KeyFilter.Any, builder.Environment.EnvironmentName)
+            .UseFeatureFlags();
+    });
+}
+
+var blobStorageConnectionString = builder.Configuration.GetConnectionString("BlobStorage");
+builder.Services.AddAzureClients(configuration =>
+{
+    configuration.AddBlobServiceClient(blobStorageConnectionString);
+});
+
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Security:Jwt"));
 builder.Services.Configure<PacksOptions>(builder.Configuration.GetSection("Packs"));
+builder.Services.Configure<UploadLimitsOptions>(builder.Configuration.GetSection("Uploads:Limits"));
 
-builder.Services.AddControllers().
-    AddJsonOptions(options =>
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
     {
         var stringToEnumConverter = new JsonStringEnumConverter(JsonNamingPolicy.CamelCase);
         options.JsonSerializerOptions.Converters.Add(stringToEnumConverter);
@@ -50,6 +74,7 @@ builder.Services.AddRequestLocalization(options =>
     options.ApplyCurrentCultureToResponseHeaders = true;
     options.FallBackToParentCultures = true;
 });
+
 var jwtSecretKey = builder.Configuration.GetRequiredValue<string>("Security:Jwt:Secret");
 var audience = builder.Configuration.GetRequiredValue<string>("Security:Jwt:Audience");
 var issuer = builder.Configuration.GetRequiredValue<string>("Security:Jwt:Issuer");
@@ -77,8 +102,8 @@ builder.Services.AddSwaggerGen(options =>
     options.EnableAnnotations();
     options.SwaggerDoc("v1", new()
     {
-        Title = "KartÃ³wka API",
-        Description = "The KartÃ³wka REST-like API.",
+        Title = "Kartówka API",
+        Description = "The Kartówka REST-like API.",
         Version = "0.1.0",
     });
 
@@ -125,23 +150,40 @@ builder.Services.AddHostedService<ApplyMigrationsHostedService>();
 builder.Services.AddScoped<IHasher, Pbkdf2Hasher>();
 builder.Services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();
 builder.Services.AddScoped<IAccessTokenGenerator, JwtAccessTokenGenerator>();
-builder.Services.AddScoped(typeof(IAsyncValidatorsRunner<>), typeof(AsyncValidatorsRunner<>));
+builder.Services.AddScoped(typeof(IValidatorsRunner<>), typeof(ValidatorsRunner<>));
 builder.Services.AddScoped<IAsyncValidator<UserData>, UserDataUniquenessValidator>();
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
-
-// Middleware DI registration
-builder.Services.AddScoped<RequestBufferingMiddleware>();
-builder.Services.AddScoped<KartowkaExceptionsHandlingMiddleware>();
+builder.Services.AddScoped<IAssetsService, AssetsService>();
 builder.Services.AddScoped<IPacksService, PacksService>();
 builder.Services.AddScoped<IRoundsService, RoundsService>();
 builder.Services.AddScoped<IQuestionsService, QuestionsService>();
 builder.Services.AddScoped<IQuestionsCategoriesService, QuestionsCategoriesService>();
 builder.Services.AddScoped<IAsyncValidator<Pack>, PackAuthorValidator>();
 builder.Services.AddScoped<IAsyncValidator<Pack>, UserPacksLimitValidator>();
-builder.Services.AddScoped<IAsyncValidator<Pack>, PackQuestionsLimitValidator>();
-builder.Services.AddScoped<IAsyncValidator<Pack>, PackRoundsLimitValidator>();
-builder.Services.AddScoped<IAsyncValidator<Pack>, PackQuestionsCategoriesLimitValidator>();
-builder.Services.AddScoped<IAsyncValidator<Question>, QuestionContentTypeValidator>();
+builder.Services.AddScoped<IValidator<Pack>, PackQuestionsLimitValidator>();
+builder.Services.AddScoped<IValidator<Pack>, PackRoundsLimitValidator>();
+builder.Services.AddScoped<IValidator<Pack>, PackQuestionsCategoriesLimitValidator>();
+builder.Services.AddScoped<IValidator<Question>, TextQuestionContentValidator>();
+builder.Services.AddScoped<IValidator<Question>, ImageQuestionContentValidator>();
+builder.Services.AddScoped<IValidator<Question>, MusicQuestionContentValidator>();
+
+builder.Services.AddScoped<IBlobsStore, AzureBlobStore>()
+    .Decorate<IBlobsStore, BlobStoreExceptionsWrapperDecorator>();
+
+builder.Services.AddScoped<IContentTypeProvider, ContentTypeProvider>(_ =>
+{
+    var supportedTypes = builder.Configuration
+        .GetSection("Uploads:SupportedContentTypes:Assets")
+        .GetChildren()
+        .Where(config => config.Value is not null)
+        .ToDictionary(config => config.Key, config => config.Value!);
+
+    return new ContentTypeProvider(supportedTypes);
+});
+
+// Middleware DI registration
+builder.Services.AddScoped<RequestBufferingMiddleware>();
+builder.Services.AddScoped<KartowkaExceptionsHandlingMiddleware>();
 
 var app = builder.Build();
 

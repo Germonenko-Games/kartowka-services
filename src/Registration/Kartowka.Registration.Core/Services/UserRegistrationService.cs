@@ -22,14 +22,14 @@ public class UserRegistrationService : IUserRegistrationService
 
     private readonly IHasher _hasher;
 
-    private readonly IAsyncValidatorsRunner<UserData> _validatorsRunner;
+    private readonly IValidatorsRunner<UserData> _validatorsRunner;
 
     public UserRegistrationService(
         IFeatureManager featureManager,
         IStringLocalizer<ErrorMessages> stringLocalizer,
         CoreContext context,
         IHasher hasher,
-        IAsyncValidatorsRunner<UserData> validatorsRunner
+        IValidatorsRunner<UserData> validatorsRunner
     )
     {
         _featureManger = featureManager;

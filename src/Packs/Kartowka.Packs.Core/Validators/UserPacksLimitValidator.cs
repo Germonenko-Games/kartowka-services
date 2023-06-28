@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Kartowka.Common.Localization.Extensions;
 using Kartowka.Common.Validation;
 using Kartowka.Core;
 using Kartowka.Core.Models;
@@ -40,9 +39,10 @@ public class UserPacksLimitValidator : IAsyncValidator<Pack>
             return true;
         }
 
-        var errorMessage = _stringLocalizer
-            .GetString(nameof(PacksErrorMessages.PacksLimitExceeded))
-            .Format(MaxPacksNumberPerUser);
+        var errorMessage = _stringLocalizer.GetString(
+            nameof(PacksErrorMessages.PacksLimitExceeded),
+            MaxPacksNumberPerUser
+        );
 
         validationResults.Add(new (errorMessage, new []{nameof(Pack.AuthorId)}));
         return false;

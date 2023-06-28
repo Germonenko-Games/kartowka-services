@@ -20,7 +20,7 @@ public class QuestionsCategoriesController : ControllerBase
     }
 
     [HttpPost("")]
-    [SwaggerOperation("Creates a new questions category.")]
+    [SwaggerOperation("Create a new question")]
     [SwaggerResponse(
         StatusCodes.Status200OK,
         "New questions category object.",
@@ -42,7 +42,7 @@ public class QuestionsCategoriesController : ControllerBase
     }
 
     [HttpPatch("{categoryId:long}")]
-    [SwaggerOperation("Creates a new questions category.")]
+    [SwaggerOperation("Create a new questions category")]
     [SwaggerResponse(
         StatusCodes.Status200OK,
         "Updated questions category object.",
@@ -71,6 +71,7 @@ public class QuestionsCategoriesController : ControllerBase
     }
 
     [HttpDelete("{categoryId:long}")]
+    [SwaggerOperation("Remove a category")]
     [SwaggerResponse(StatusCodes.Status204NoContent, "No content success response.")]
     public async Task<NoContentResult> RemoveQuestionsCategoryAsync([FromRoute] long categoryId)
     {

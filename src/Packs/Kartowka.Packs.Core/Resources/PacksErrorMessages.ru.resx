@@ -132,9 +132,6 @@
   <data name="QuestionDataIsInvalid" xml:space="preserve">
     <value>Данные вопроса не верны.</value>
   </data>
-  <data name="QuestionTypeIsUnsupported" xml:space="preserve">
-    <value>Тип вопроса не поддерживается.</value>
-  </data>
   <data name="QuestionNotFound" xml:space="preserve">
     <value>Вопрос с данным ID не найден.</value>
   </data>
@@ -155,5 +152,26 @@
   </data>
   <data name="PackQuestionsCategoriesLimitExceeded" xml:space="preserve">
     <value>Достигнут максимум допустимых категорий вопросов для пака. Максимально количество категорий вопросов для одного пака - {0}.</value>
+  </data>
+  <data name="QuestionTextIsRequired" xml:space="preserve">
+    <value>Тексто вопроса обязателен для текстовых вопросов.</value>
+  </data>
+  <data name="AssetIsRequired" xml:space="preserve">
+    <value>Ассет обязателен для музыкальных вопросов, а также для вопросов с картиками.</value>
+  </data>
+  <data name="ImageQuestionContentIsInvalid" xml:space="preserve">
+    <value>Вопросы с изображением должны иметь корректный прикреплённый ассет (изображение).</value>
+  </data>
+  <data name="MusicQuestionContentIsInvalid" xml:space="preserve">
+    <value>Вопросы с изображением должны иметь корректный прикреплённый ассет (аудиозапись).</value>
+  </data>
+  <data name="AssetsStorageLimitExceeded" xml:space="preserve">
+    <value>Превышен лимит хранилища для ассетов.</value>
+  </data>
+  <data name="AssetMimeTypeIsUnsupported" xml:space="preserve">
+    <value>Данный mime-тип не поддерживается. Поддерживаеме mime-типы:  image/jpeg, image/png, audio/mpeg и audio/ogg.</value>
+  </data>
+  <data name="AssetNotFound" xml:space="preserve">
+    <value>Ассет с данным ID не найден.</value>
   </data>
 </root>

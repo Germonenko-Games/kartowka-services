@@ -2,6 +2,8 @@
 
 public class PacksOptions
 {
+    public int DefaultPlanStorageLimitMb { get; set; }
+
     public int MaxPacksNumberPerUser { get; set; }
 
     public int MaxQuestionsNumberPerPack { get; set; }

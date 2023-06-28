@@ -15,16 +15,16 @@ public class RoundsService : IRoundsService
 {
     private readonly CoreContext _context;
 
-    private readonly IAsyncValidatorsRunner<Pack> _packValidatorsRunner;
+    private readonly IValidatorsRunner<Pack> _packValidatorsRunner;
 
-    private readonly IAsyncValidatorsRunner<Round> _roundValidatorsRunner;
+    private readonly IValidatorsRunner<Round> _roundValidatorsRunner;
 
     private readonly IStringLocalizer<PacksErrorMessages> _stringLocalizer;
 
     public RoundsService(
         CoreContext context,
-        IAsyncValidatorsRunner<Pack> packValidatorsRunner,
-        IAsyncValidatorsRunner<Round> roundValidatorsRunner,
+        IValidatorsRunner<Pack> packValidatorsRunner,
+        IValidatorsRunner<Round> roundValidatorsRunner,
         IStringLocalizer<PacksErrorMessages> stringLocalizer
     )
     {

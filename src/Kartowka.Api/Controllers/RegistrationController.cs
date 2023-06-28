@@ -11,7 +11,7 @@ namespace Kartowka.Api.Controllers;
 public class RegistrationController : ControllerBase
 {
     [HttpPost("")]
-    [SwaggerOperation("Registers a new user.")]
+    [SwaggerOperation("Register a new user")]
     [SwaggerResponse(StatusCodes.Status204NoContent, "Success response")]
     [SwaggerResponse(
         StatusCodes.Status400BadRequest,

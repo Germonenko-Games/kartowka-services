@@ -9,6 +9,10 @@ public class UpdateQuestionsCategoryDto
 
     public int? Order { get; set; }
 
+    [StringLength(50,
+        ErrorMessageResourceType = typeof(CoreErrorMessages),
+        ErrorMessageResourceName = "StringLength50"
+    )]
     public string? Name { get; set; }
 
 }

@@ -2,7 +2,8 @@
 
 public enum PackProperties
 {
-    Rounds,
+    Assets,
     Categories,
     Questions,
+    Rounds,
 }

@@ -37,7 +37,7 @@ public class Asset
 
     public AssetType AssetType { get; set; }
 
-    [Required(AllowEmptyStrings = false,
+    [Required(
         ErrorMessageResourceType = typeof(CoreErrorMessages),
         ErrorMessageResourceName = nameof(CoreErrorMessages.Required)
     )]
