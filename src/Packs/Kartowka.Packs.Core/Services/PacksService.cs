@@ -1,4 +1,5 @@
-﻿using Kartowka.Common.Validation;
+﻿using Kartowka.Common.Messaging;
+using Kartowka.Common.Validation;
 using Kartowka.Core;
 using Kartowka.Core.Exceptions;
 using Kartowka.Core.Models;
@@ -17,16 +18,20 @@ public class PacksService : IPacksService
 
     private readonly IValidatorsRunner<Pack> _packValidatorsRunner;
 
+    private readonly IPublisher<PackCleanupMessage> _publisher;
+
     private readonly IStringLocalizer<PacksErrorMessages> _stringLocalizer;
 
     public PacksService(
         CoreContext context,
         IValidatorsRunner<Pack> packValidatorsRunner,
+        IPublisher<PackCleanupMessage> publisher,
         IStringLocalizer<PacksErrorMessages> stringLocalizer
     )
     {
         _context = context;
         _packValidatorsRunner = packValidatorsRunner;
+        _publisher = publisher;
         _stringLocalizer = stringLocalizer;
     }
 
@@ -137,8 +142,8 @@ public class PacksService : IPacksService
         // So there's no need to manually remove them
         _context.Packs.Remove(pack);
         await _context.SaveChangesAsync();
-        
-        // TODO: Remove related assets as well.
+
+        await _publisher.PublishAsync(new() { PackId = packId });
 
         return true;
     }
