@@ -14,9 +14,13 @@ using Kartowka.Common.Blobs;
 using Kartowka.Common.Blobs.Azure;
 using Kartowka.Common.Crypto;
 using Kartowka.Common.Crypto.Abstractions;
+using Kartowka.Common.Messaging;
+using Kartowka.Common.Messaging.Azure.Extensions;
 using Kartowka.Common.Validation;
 using Kartowka.Core;
 using Kartowka.Core.Models;
+using Kartowka.Packs.Core.Consumers;
+using Kartowka.Packs.Core.Models;
 using Kartowka.Packs.Core.Options;
 using Kartowka.Packs.Core.Services;
 using Kartowka.Packs.Core.Services.Abstractions;
@@ -52,6 +56,7 @@ var blobStorageConnectionString = builder.Configuration.GetConnectionString("Blo
 builder.Services.AddAzureClients(configuration =>
 {
     configuration.AddBlobServiceClient(blobStorageConnectionString);
+    configuration.AddQueueServiceClient(blobStorageConnectionString);
 });
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Security:Jwt"));
@@ -146,6 +151,20 @@ builder.Services.AddDbContext<CoreContext>(options =>
 // Hosted Services
 builder.Services.AddHostedService<ApplyMigrationsHostedService>();
 
+builder.Services.ConfigureEndpoint<PackCleanupMessage>(options =>
+{
+    options.MaxConcurrentMessages = 1;
+});
+builder.Services.RegisterAzureQueueReceiver<PackCleanupMessage>(options =>
+{
+    options.QueueName = "pack-cleanup";
+    options.DeadLetterQueueName = "pack-cleanup-dl";
+});
+builder.Services.RegisterAzureQueuePublisher<PackCleanupMessage>(options =>
+{
+    options.QueueName = "pack-cleanup";
+});
+
 // Services
 builder.Services.AddScoped<IHasher, Pbkdf2Hasher>();
 builder.Services.AddScoped<IUserAuthorizationService, UserAuthorizationService>();
@@ -155,6 +174,8 @@ builder.Services.AddScoped<IAsyncValidator<UserData>, UserDataUniquenessValidato
 builder.Services.AddScoped<IUserRegistrationService, UserRegistrationService>();
 builder.Services.AddScoped<IAssetsService, AssetsService>();
 builder.Services.AddScoped<IPacksService, PacksService>();
+builder.Services.AddScoped<IPackBlobsCleanupService, PackBlobsCleanupService>();
+builder.Services.AddScoped<IConsumer<PackCleanupMessage>, PackBlobsCleanupConsumer>();
 builder.Services.AddScoped<IRoundsService, RoundsService>();
 builder.Services.AddScoped<IQuestionsService, QuestionsService>();
 builder.Services.AddScoped<IQuestionsCategoriesService, QuestionsCategoriesService>();

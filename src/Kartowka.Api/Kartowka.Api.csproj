@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -32,6 +32,7 @@
     <ProjectReference Include="..\Authorization\Kartowka.Authorization.Infrastructure\Kartowka.Authorization.Infrastructure.csproj" />
     <ProjectReference Include="..\Common\Kartowka.Common.Blobs.Azure\Kartowka.Common.Blobs.Azure.csproj" />
     <ProjectReference Include="..\Common\Kartowka.Common.Crypto\Kartowka.Common.Crypto.csproj" />
+    <ProjectReference Include="..\Common\Kartowka.Common.Messaging.Azure\Kartowka.Common.Messaging.Azure.csproj" />
     <ProjectReference Include="..\Kartowka.Core\Kartowka.Core.csproj" />
     <ProjectReference Include="..\Kartowka.Migrations\Kartowka.Migrations.csproj" />
     <ProjectReference Include="..\Packs\Kartowka.Packs.Core\Kartowka.Packs.Core.csproj" />

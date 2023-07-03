@@ -4,6 +4,8 @@ namespace Kartowka.Common.Blobs;
 
 public interface IBlobsStore
 {
+    public Task<List<BlobDescriptor>> GetDirectoryContentAsync(string collection, string path);
+
     public Task<BlobDescriptor> SaveBlobAsync(
         string collection,
         string fileName,
@@ -11,5 +13,5 @@ public interface IBlobsStore
         IDictionary<string, string>? metadata = null
     );
 
-    public Task RemoveBlobAsync(string containereName, string fileName);
+    public Task RemoveBlobAsync(string collection, string fileName);
 }

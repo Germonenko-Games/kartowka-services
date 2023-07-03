@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Common\Kartowka.Common.Blobs\Kartowka.Common.Blobs.csproj" />
       <ProjectReference Include="..\..\Common\Kartowka.Common.Validation\Kartowka.Common.Validation.csproj" />
+      <ProjectReference Include="..\..\Kartowka.Common.Messaging\Kartowka.Common.Messaging.csproj" />
       <ProjectReference Include="..\..\Kartowka.Core\Kartowka.Core.csproj" />
     </ItemGroup>
 

@@ -13,7 +13,19 @@ public class BlobStoreExceptionsWrapperDecorator : IBlobsStore
         _baseBlobStore = blobsStore;
     }
 
-    public Task<BlobDescriptor> SaveBlobAsync(
+    public async Task<List<BlobDescriptor>> GetDirectoryContentAsync(string collection, string path)
+    {
+        try
+        {
+            return await _baseBlobStore.GetDirectoryContentAsync(collection, path);
+        }
+        catch (Exception e)
+        {
+            throw new KartowkaInfrastructureException("Failed to get blob descriptors from the azure storage.", e);
+        }
+    }
+
+    public async Task<BlobDescriptor> SaveBlobAsync(
         string collection,
         string fileName,
         Stream content,
@@ -22,7 +34,7 @@ public class BlobStoreExceptionsWrapperDecorator : IBlobsStore
     {
         try
         {
-            return _baseBlobStore.SaveBlobAsync(collection, fileName, content, metadata);
+            return await _baseBlobStore.SaveBlobAsync(collection, fileName, content, metadata);
         }
         catch (RequestFailedException e)
         {
