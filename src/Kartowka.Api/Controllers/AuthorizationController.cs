@@ -6,7 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Kartowka.Api.Controllers;
 
-[ApiController, Route("api/authorization")]
+[ApiController, Route("api/authorization"), Consumes(MediaTypeNames.Application.Json)]
 public class AuthorizationController : ControllerBase
 {
     [HttpPost("")]

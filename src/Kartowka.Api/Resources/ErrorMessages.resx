@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AssetFileIsRequired" xml:space="preserve">
+    <value>Asset file must be attached via 'asset' form field.</value>
+  </data>
   <data name="FileSizeLimitExceeded" xml:space="preserve">
     <value>Failed to upload file because the file size limit was exceeded. Max file size limit is {0} mb.</value>
+  </data>
+  <data name="PackIdIsRequired" xml:space="preserve">
+    <value>Pack ID must be specified via packId form field.</value>
   </data>
   <data name="UnknownErrorResponse" xml:space="preserve">
     <value>Unknown error occured. If the error persists, please contact the support.</value>

@@ -61,11 +61,29 @@ namespace Kartowka.Api.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Asset file must be attached via &apos;asset&apos; form field..
+        /// </summary>
+        public static string AssetFileIsRequired {
+            get {
+                return ResourceManager.GetString("AssetFileIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to upload file because the file size limit was exceeded. Max file size limit is {0} mb..
         /// </summary>
         public static string FileSizeLimitExceeded {
             get {
                 return ResourceManager.GetString("FileSizeLimitExceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pack ID must be specified via packId form field..
+        /// </summary>
+        public static string PackIdIsRequired {
+            get {
+                return ResourceManager.GetString("PackIdIsRequired", resourceCulture);
             }
         }
         

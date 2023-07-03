@@ -1,19 +1,16 @@
 ﻿using System.Net.Mime;
 using Kartowka.Api.Models;
-using Kartowka.Api.Options;
 using Kartowka.Core.Models;
 using Kartowka.Packs.Core.Models;
 using Kartowka.Packs.Core.Models.Enums;
 using Kartowka.Packs.Core.Services.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace Kartowka.Api.Controllers;
 
-[ApiController, Authorize, Route("api/packs")]
+[ApiController, Authorize, Route("api/packs"), Consumes(MediaTypeNames.Application.Json)]
 public class PacksController : ControllerBase
 {
     private readonly IPacksService _packsService;
@@ -78,63 +75,5 @@ public class PacksController : ControllerBase
     {
         await _packsService.RemovePackAsync(packId);
         return NoContent();
-    }
-
-    [HttpPost("{packId:long}/assets/{fileName}")]
-    [Consumes("image/jpeg", "image/png", "audio/mpeg", "audio/ogg")]
-    [SwaggerOperation("Upload a new asset")]
-    [SwaggerResponse(
-        StatusCodes.Status200OK,
-        "Uploaded asset descriptor",
-        typeof(Asset),
-        MediaTypeNames.Application.Json
-    )]
-    [SwaggerResponse(
-        StatusCodes.Status400BadRequest,
-        "Validation error",
-        typeof(ErrorResponse),
-        MediaTypeNames.Application.Json
-    )]
-    [SwaggerResponse(
-        StatusCodes.Status404NotFound,
-        "Pack not found error",
-        typeof(ErrorResponse),
-        MediaTypeNames.Application.Json
-    )]
-    public async Task<ActionResult<Asset>> UploadAssetAsync(
-        [FromRoute] long packId,
-        [FromRoute] string fileName,
-        [FromServices] IAssetsService assetsService,
-        [FromServices] IOptionsSnapshot<UploadLimitsOptions> uploadOptions,
-        [FromServices] IStringLocalizer<Resources.ErrorMessages> errorMessages
-    )
-    {
-        var fileSizeLimit = uploadOptions.Value.MaxAssetFileSizeMb * 1024 * 1024;
-        var fileSizeExceedsLimit = Request.ContentLength > fileSizeLimit;
-
-        if (fileSizeExceedsLimit)
-        {
-            var message = errorMessages.GetString(
-                nameof(Resources.ErrorMessages.FileSizeLimitExceeded),
-                fileSizeLimit
-            );
-            var response = new ErrorResponse(message);
-            return BadRequest(response);
-        }
-
-        using var inMemoryContentStream = new MemoryStream();
-        await Request.Body.CopyToAsync(inMemoryContentStream);
-        inMemoryContentStream.Position = 0;
-
-        var uploadDto = new UploadAssetDto
-        {
-            MimeType = Request.ContentType ?? string.Empty,
-            DisplayName = fileName,
-            Content = inMemoryContentStream,
-            PackId = packId
-        };
-
-        var assetDescriptor = await assetsService.CreateAssetAsync(uploadDto);
-        return Ok(assetDescriptor);
     }
 }

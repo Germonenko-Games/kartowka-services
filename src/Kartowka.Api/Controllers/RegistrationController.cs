@@ -7,7 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Kartowka.Api.Controllers;
 
-[ApiController, Route("api/registration")]
+[ApiController, Route("api/registration"), Consumes(MediaTypeNames.Application.Json)]
 public class RegistrationController : ControllerBase
 {
     [HttpPost("")]

@@ -9,7 +9,7 @@ using System.Net.Mime;
 
 namespace Kartowka.Api.Controllers;
 
-[ApiController, Authorize, Route("api/questions-categories")]
+[ApiController, Authorize, Route("api/questions-categories"), Consumes(MediaTypeNames.Application.Json)]
 public class QuestionsCategoriesController : ControllerBase
 {
     private readonly IQuestionsCategoriesService _questionsCategoriesService;

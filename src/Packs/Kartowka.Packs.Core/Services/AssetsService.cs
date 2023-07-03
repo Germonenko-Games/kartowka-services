@@ -1,4 +1,5 @@
 ﻿using Kartowka.Common.Blobs;
+using Kartowka.Common.Blobs.Models;
 using Kartowka.Core;
 using Kartowka.Core.Exceptions;
 using Kartowka.Core.Models;
@@ -43,6 +44,18 @@ public class AssetsService : IAssetsService
         _options = options;
         _errorMessages = errorMessages;
         _assetsStrings = assetsStrings;
+    }
+
+    public async Task<Asset> GetAssetAsync(long assetId)
+    {
+        var asset = await _context.Assets.FindAsync(assetId);
+        if (asset is null)
+        {
+            var message = _errorMessages.GetString(nameof(PacksErrorMessages.AssetNotFound));
+            throw new KartowkaNotFoundException(message);
+        }
+
+        return asset;
     }
 
     public async Task<Asset> CreateAssetAsync(UploadAssetDto assetDto)

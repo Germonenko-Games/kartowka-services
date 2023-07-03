@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Kartowka.Api.Extensions;
 using Kartowka.Api.HostedServices;
 using Kartowka.Api.Middleware;
+using Kartowka.Api.OpenApi.Operations;
 using Kartowka.Api.Options;
 using Kartowka.Authorization.Core.Contracts;
 using Kartowka.Authorization.Core.Services;
@@ -105,6 +106,9 @@ builder.Services
 builder.Services.AddSwaggerGen(options =>
 {
     options.EnableAnnotations();
+    
+    options.OperationFilter<ServerErrorOperationFilter>();
+
     options.SwaggerDoc("v1", new()
     {
         Title = "Kartówka API",

@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AssetFileIsRequired" xml:space="preserve">
+    <value>Необходимо прикрепить файл, который будет использоваться в качестве ассета. Файл необходимо прикрепить к форме в поле asset.</value>
+  </data>
   <data name="FileSizeLimitExceeded" xml:space="preserve">
     <value>Невозможно загрузить файл, как как его размер превышает максимально допустимое значение. Максимальный размер файлов не может превышать {0} мб.</value>
+  </data>
+  <data name="PackIdIsRequired" xml:space="preserve">
+    <value>Необходимо указать ID пака в качестве поля формы.</value>
   </data>
   <data name="UnknownErrorResponse" xml:space="preserve">
     <value>Произошла непредвиденная ошибка. В случае повторения ошибки, пожалуйста, обратитесь в поддержку.</value>

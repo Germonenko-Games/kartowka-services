@@ -9,7 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Kartowka.Api.Controllers;
 
-[ApiController, Authorize, Route("api/questions")]
+[ApiController, Authorize, Route("api/questions"), Consumes(MediaTypeNames.Application.Json)]
 public class QuestionsController : ControllerBase
 {
     private readonly IQuestionsService _questionsService;

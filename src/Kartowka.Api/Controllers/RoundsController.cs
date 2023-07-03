@@ -9,7 +9,7 @@ using System.Net.Mime;
 
 namespace Kartowka.Api.Controllers;
 
-[ApiController, Authorize, Route("api/rounds")]
+[ApiController, Authorize, Route("api/rounds"), Consumes(MediaTypeNames.Application.Json)]
 public class RoundsController : ControllerBase
 {
     private readonly IRoundsService _roundsService;
