@@ -106,7 +106,9 @@ builder.Services
 builder.Services.AddSwaggerGen(options =>
 {
     options.EnableAnnotations();
-    
+
+    options.OperationFilter<DefaultResponseHeadersOperationFilter>();
+    options.OperationFilter<LanguageRequestHeaderOperationFilter>();
     options.OperationFilter<ServerErrorOperationFilter>();
 
     options.SwaggerDoc("v1", new()
